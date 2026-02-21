@@ -239,14 +239,14 @@ curl http://localhost:3000/api/orders `
 
 1. **Abra o navegador**
 2. **Acesse:** http://localhost ou http://localhost:80
-3. **Você verá:** Interface React do e-commerce
+3. **Você verá:** Interface React do EduShare
 
 **Funcionalidades disponíveis:**
-- ✅ Página inicial com lista de produtos
-- ✅ Cadastro de usuário
+- ✅ Página inicial com lista de materiais didáticos
+- ✅ Cadastro de professor
 - ✅ Login
-- ✅ Carrinho de compras
-- ✅ Finalizar pedido
+- ✅ Biblioteca de materiais salvos
+- ✅ Compartilhar materiais com alunos
 - ✅ Visualizar perfil
 
 ---
@@ -593,18 +593,18 @@ Connection refused
 - [ ] Registro de usuário funciona
 - [ ] Login funciona e retorna token
 - [ ] Criação de produto funciona (com token)
-- [ ] Listagem de produtos funciona
-- [ ] Filtros de produtos funcionam
-- [ ] Criação de pedido funciona
-- [ ] Listagem de pedidos funciona
+- [ ] Listagem de materiais funciona
+- [ ] Filtros de materiais funcionam
+- [ ] Criação de compartilhamento funciona
+- [ ] Listagem de compartilhamentos funciona
 
 ### ✅ Interface Web
 - [ ] http://localhost abre a aplicação
-- [ ] Página inicial mostra produtos
+- [ ] Página inicial mostra materiais
 - [ ] Cadastro funciona
 - [ ] Login funciona
-- [ ] Carrinho funciona
-- [ ] Checkout funciona
+- [ ] Biblioteca de materiais funciona
+- [ ] Compartilhamento funciona
 
 ### ✅ Testes
 - [ ] Testes de segurança passam

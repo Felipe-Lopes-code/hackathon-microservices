@@ -74,7 +74,7 @@
 
 ---
 
-### Funcionalidades do E-commerce
+### Funcionalidades do EduShare
 - [x] **Gestão de Usuários**
   - [x] Cadastro (POST /api/auth/register)
   - [x] Login (POST /api/auth/login)
@@ -91,11 +91,11 @@
   - [x] Listar pedidos (GET /api/orders)
   - [x] Buscar pedido (GET /api/orders/:id)
   - [x] Atualizar status (PUT /api/orders/:id/status)
-- [x] **Carrinho de Compras**
-  - [x] Adicionar ao carrinho (frontend)
-  - [x] Remover do carrinho (frontend)
-  - [x] Atualizar quantidade (frontend)
-  - [x] Finalizar compra (integração)
+- [x] **Biblioteca de Materiais**
+  - [x] Adicionar à biblioteca (frontend)
+  - [x] Remover da biblioteca (frontend)
+  - [x] Gerenciar seleção (frontend)
+  - [x] Compartilhar material (integração)
 
 **Score: 4/4 (100%)**
 

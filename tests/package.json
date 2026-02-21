@@ -1,7 +1,7 @@
 {
   "name": "hackathon-microservices-tests",
   "version": "1.0.0",
-  "description": "Security and Performance Tests for E-commerce Microservices",
+  "description": "Security and Performance Tests for EduShare Microservices",
   "main": "index.js",
   "scripts": {
     "test": "jest",

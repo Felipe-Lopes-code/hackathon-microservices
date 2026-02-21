@@ -2,7 +2,7 @@
 
 ## 🎯 Visão Geral
 
-**Projeto:** E-commerce Microservices Platform  
+**Projeto:** EduShare - Plataforma de Materiais Didáticos  
 **Avaliação:** ⭐⭐⭐⭐⭐ (93.75/100)  
 **Status:** ✅ APROVADO PARA PRODUÇÃO  
 **Data:** ${new Date().toLocaleDateString('pt-BR')}
@@ -388,7 +388,7 @@ Infrastructure     ✅ Implementações concretas
 
 ## 🎓 CERTIFICAÇÃO
 
-> **CERTIFICO** que o projeto **E-commerce Microservices Platform** foi submetido a uma auditoria completa de segurança, performance, arquitetura e conformidade.
+> **CERTIFICO** que o projeto **EduShare - Plataforma de Materiais Didáticos** foi submetido a uma auditoria completa de segurança, performance, arquitetura e conformidade.
 >
 > O projeto demonstra:
 > - ✅ Arquitetura de microserviços bem implementada

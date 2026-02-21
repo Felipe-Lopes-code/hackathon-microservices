@@ -1,10 +1,10 @@
 @echo off
 REM Script de Execução de Testes de Segurança e Performance
-REM E-commerce Microservices Platform
+REM EduShare - Plataforma de Materiais Didáticos
 
 echo ==============================================
 echo   🔒 AUDITORIA DE SEGURANÇA E PERFORMANCE
-echo   E-commerce Microservices Platform
+echo   EduShare - Plataforma de Materiais Didáticos
 echo ==============================================
 echo.
 

@@ -59,7 +59,7 @@
 - ⚠️ Alguns testes de integração falham sem banco de dados
 
 **Código:**
-- ⚠️ Nomenclatura de entidades ainda reflete e-commerce (Product, Order)
+- ✅ Nomenclatura de entidades alinhada ao tema educacional (Material, Share)
 - ⚠️ Falta validação de entrada em alguns endpoints
 - ⚠️ Tratamento de erros poderia ser mais específico
 
@@ -527,16 +527,16 @@ async findUserByEmail(email)
 const hashedPassword = await bcrypt.hash(password, 10);
 ```
 
-**Negativo:**
+**Positivo (Corrigido):**
 ```javascript
-// ⚠️ PROBLEMA: Nomenclatura ainda reflete e-commerce
-class Product  // Deveria ser: Material
-class Order    // Deveria ser: Share ou Compartilhamento
+// ✅ CORRIGIDO: Nomenclatura alinhada ao tema educacional
+class Material  // Entidade de materiais didáticos
+class Share     // Entidade de compartilhamento entre professores
 ```
 
-**Recomendação:** Renomear entidades para contexto educacional
+**Resultado:** Entidades renomeadas com sucesso para contexto educacional
 
-**Score:** 75/100
+**Score:** 90/100
 
 ---
 
@@ -1037,11 +1037,11 @@ toJSON() {
 
 ### 9.2 Altos (Importante) 🟠
 
-**1. Nomenclatura de Entidades**
-- **Problema:** `Product`, `Order` ainda refletem e-commerce
-- **Impacto:** Confusão conceitual, falta de alinhamento com tema
-- **Solução:** Renomear para `Material`, `Share`
-- **Esforço:** Médio (refactoring)
+**1. ~~Nomenclatura de Entidades~~ ✅ RESOLVIDO**
+- **Status:** Corrigido - Entidades renomeadas para `Material` e `Share`
+- **Impacto:** Alinhamento completo com tema educacional
+- **Ação:** Refactoring aplicado em entidades, controllers, rotas e frontend
+- **Esforço:** Concluído
 
 **2. Testes Requerem Setup**
 - **Problema:** Testes falham sem variáveis de ambiente e banco

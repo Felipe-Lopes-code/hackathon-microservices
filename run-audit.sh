@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # Script de Execução de Testes de Segurança e Performance
-# E-commerce Microservices Platform
+# EduShare - Plataforma de Materiais Didáticos
 
 echo "=============================================="
 echo "  🔒 AUDITORIA DE SEGURANÇA E PERFORMANCE"
-echo "  E-commerce Microservices Platform"
+echo "  EduShare - Plataforma de Materiais Didáticos"
 echo "=============================================="
 echo ""
 

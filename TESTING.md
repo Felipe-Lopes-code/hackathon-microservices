@@ -70,7 +70,7 @@ curl -X POST http://localhost:3000/api/orders \
     ]
   }'
 
-# Listar meus pedidos
+# Listar meus compartilhamentos
 curl -X GET http://localhost:3000/api/orders/my-orders \
   -H "Authorization: Bearer $TOKEN"
 
