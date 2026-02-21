@@ -162,8 +162,8 @@ const swaggerDefinition = {
 const swaggerOptions = {
   definition: swaggerDefinition,
   apis: [
-    path.join(__dirname, 'swagger', '*.js'),
-    path.join(__dirname, 'index.js')
+    path.join(__dirname, 'swagger', '*.js').replace(/\\/g, '/'),
+    path.join(__dirname, 'index.js').replace(/\\/g, '/')
   ],
 };
 

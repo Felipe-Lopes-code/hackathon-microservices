@@ -62,8 +62,8 @@ describe('Swagger Documentation Tests', () => {
     const swaggerOptions = {
       definition: swaggerDefinition,
       apis: [
-        path.join(__dirname, '../api-gateway/src/swagger', '*.js'),
-        path.join(__dirname, '../api-gateway/src', 'index.js')
+        path.join(__dirname, '../api-gateway/src/swagger', '*.js').replace(/\\/g, '/'),
+        path.join(__dirname, '../api-gateway/src', 'index.js').replace(/\\/g, '/')
       ],
     };
     
