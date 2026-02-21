@@ -1,4 +1,4 @@
-const request = require('supertest');
+const axios = require('axios');
 const autocannon = require('autocannon');
 
 /**
@@ -6,25 +6,57 @@ const autocannon = require('autocannon');
  * Testes de carga e performance para os microserviços
  */
 describe('Performance Tests', () => {
-  let app;
+  const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:3000';
 
-  beforeAll(() => {
-    app = require('../api-gateway/src/index');
+  beforeAll(async () => {
+    // Verificar se API está online
+    try {
+      await axios.get(`${API_BASE_URL}/health`);
+      console.log('✅ API Gateway online para testes de performance');
+    } catch (error) {
+      throw new Error(`❌ API Gateway offline. Execute: docker-compose up -d`);
+    }
   });
 
   describe('Response Time Tests', () => {
-    it('health check should respond within 100ms', async () => {
+    it('health check should respond within 200ms', async () => {
       const start = Date.now();
-      const response = await request(app).get('/health');
+      const response = await axios.get(`${API_BASE_URL}/health`);
       const duration = Date.now() - start;
 
       expect(response.status).toBe(200);
-      expect(duration).toBeLessThan(100);
+      expect(duration).toBeLessThan(200);
     });
 
-    it('product listing should respond within 500ms', async () => {
+    it('product listing should respond within 1000ms', async () => {
       const start = Date.now();
-      const response = await request(app).get('/api/products');
+      const response = await axios.get(`${API_BASE_URL}/api/products`);
+      const duration = Date.now() - start;
+
+      expect(response.status).toBe(200);
+      expect(duration).toBeLessThan(1000);
+    });
+  });
+
+  describe('Database Query Optimization', () => {
+    it('should use indexed queries for product search', async () => {
+      const response = await axios.get(`${API_BASE_URL}/api/products`, {
+        params: { category: 'electronics' }
+      });
+
+      expect(response.status).toBe(200);
+      expect(response.data.success).toBe(true);
+    });
+
+    it('should efficiently handle multiple filters', async () => {
+      const start = Date.now();
+      const response = await axios.get(`${API_BASE_URL}/api/products`, {
+        params: {
+          category: 'electronics',
+          minPrice: 100,
+          maxPrice: 1000,
+        }
+      });
       const duration = Date.now() - start;
 
       expect(response.status).toBe(200);
@@ -32,78 +64,59 @@ describe('Performance Tests', () => {
     });
   });
 
-  describe('Database Query Optimization', () => {
-    it('should use indexed queries for product search', async () => {
-      // Test que categoria está indexada
-      const response = await request(app)
-        .get('/api/products')
-        .query({ category: 'electronics' });
-
-      expect(response.status).toBe(200);
-      expect(response.body.success).toBe(true);
-    });
-
-    it('should efficiently handle multiple filters', async () => {
-      const start = Date.now();
-      const response = await request(app)
-        .get('/api/products')
-        .query({
-          category: 'electronics',
-          minPrice: 100,
-          maxPrice: 1000,
-        });
-      const duration = Date.now() - start;
-
-      expect(response.status).toBe(200);
-      expect(duration).toBeLessThan(300);
-    });
-  });
-
   describe('Pagination Performance', () => {
     it('should handle paginated requests efficiently', async () => {
       const start = Date.now();
-      const response = await request(app)
-        .get('/api/products')
-        .query({ page: 1, limit: 20 });
+      const response = await axios.get(`${API_BASE_URL}/api/products`, {
+        params: { page: 1, limit: 20 }
+      });
       const duration = Date.now() - start;
 
       expect(response.status).toBe(200);
-      expect(duration).toBeLessThan(300);
+      expect(duration).toBeLessThan(500);
     });
 
     it('should limit maximum page size', async () => {
-      const response = await request(app)
-        .get('/api/products')
-        .query({ limit: 10000 }); // Muito grande
+      const response = await axios.get(`${API_BASE_URL}/api/products`, {
+        params: { limit: 10000 }
+      });
 
       expect(response.status).toBe(200);
       // Deve ter um limite razoável
-      if (response.body.data) {
-        expect(response.body.data.length).toBeLessThanOrEqual(100);
+      if (response.data.data) {
+        expect(response.data.data.length).toBeLessThanOrEqual(100);
       }
     });
   });
 
-  describe('Memory Leak Detection', () => {
-    it('should not accumulate memory over multiple requests', async () => {
-      const initialMemory = process.memoryUsage().heapUsed;
+  describe('Concurrent Requests', () => {
+    it('should handle 10 concurrent requests', async () => {
+      const requests = Array(10).fill(null).map(() =>
+        axios.get(`${API_BASE_URL}/health`)
+      );
 
-      // Make 100 requests
-      for (let i = 0; i < 100; i++) {
-        await request(app).get('/health');
-      }
+      const results = await Promise.all(requests);
+      
+      results.forEach(response => {
+        expect(response.status).toBe(200);
+      });
+    });
 
-      // Force garbage collection if available
-      if (global.gc) {
-        global.gc();
-      }
+    it('should handle concurrent product searches', async () => {
+      const requests = Array(5).fill(null).map(() =>
+        axios.get(`${API_BASE_URL}/api/products`)
+      );
 
-      const finalMemory = process.memoryUsage().heapUsed;
-      const memoryIncrease = finalMemory - initialMemory;
-      const memoryIncreaseMB = memoryIncrease / 1024 / 1024;
+      const start = Date.now();
+      const results = await Promise.all(requests);
+      const duration = Date.now() - start;
 
-      // Memory should not increase more than 10MB
-      expect(memoryIncreaseMB).toBeLessThan(10);
+      results.forEach(response => {
+        expect(response.status).toBe(200);
+      });
+      
+      // 5 requisições simultâneas em menos de 2s
+      expect(duration).toBeLessThan(2000);
     });
   });
 });

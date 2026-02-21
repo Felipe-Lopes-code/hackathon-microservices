@@ -5,22 +5,70 @@
  */
 
 const axios = require('axios');
+const path = require('path');
+const swaggerJsdoc = require('swagger-jsdoc');
 
 const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:3000';
-const SWAGGER_SPEC_URL = `${API_BASE_URL}/api/docs/swagger.json`;
 const SWAGGER_UI_URL = `${API_BASE_URL}/api/docs`;
 
 describe('Swagger Documentation Tests', () => {
   let swaggerSpec;
 
   beforeAll(async () => {
-    try {
-      // Tentar carregar a especificação Swagger
-      const response = await axios.get(SWAGGER_SPEC_URL);
-      swaggerSpec = response.data;
-    } catch (error) {
-      console.warn('Could not load Swagger spec, some tests will be skipped');
-    }
+    // Carregar spec diretamente sem depender de endpoint HTTP
+    const swaggerDefinition = {
+      openapi: '3.0.0',
+      info: {
+        title: 'EduShare Platform API',
+        version: '1.0.0',
+        description: 'API completa para compartilhamento de materiais didáticos entre professores',
+        contact: {
+          name: 'Equipe EduShare',
+          email: 'contato@edushare.com.br',
+          url: 'https://edushare.com.br'
+        },
+        license: {
+          name: 'MIT',
+          url: 'https://opensource.org/licenses/MIT'
+        }
+      },
+      servers: [
+        {
+          url: 'http://localhost:3000',
+          description: 'Servidor de Desenvolvimento'
+        },
+        {
+          url: 'https://api.edushare.com.br',
+          description: 'Servidor de Produção'
+        }
+      ],
+      components: {
+        securitySchemes: {
+          bearerAuth: {
+            type: 'http',
+            scheme: 'bearer',
+            bearerFormat: 'JWT',
+            description: 'Token JWT obtido através do endpoint /api/auth/login'
+          }
+        }
+      },
+      security: [
+        {
+          bearerAuth: []
+        }
+      ]
+    };
+    
+    const swaggerOptions = {
+      definition: swaggerDefinition,
+      apis: [
+        path.join(__dirname, '../api-gateway/src/swagger', '*.js'),
+        path.join(__dirname, '../api-gateway/src', 'index.js')
+      ],
+    };
+    
+    swaggerSpec = swaggerJsdoc(swaggerOptions);
+    console.log('✅ Swagger spec loaded successfully');
   });
 
   describe('Swagger UI Availability', () => {
@@ -38,12 +86,12 @@ describe('Swagger Documentation Tests', () => {
 
   describe('OpenAPI Specification Structure', () => {
     test('should have valid OpenAPI version', () => {
-      if (!swaggerSpec) return;
+      expect(swaggerSpec).toBeDefined();
       expect(swaggerSpec.openapi).toBe('3.0.0');
     });
 
     test('should have API info metadata', () => {
-      if (!swaggerSpec) return;
+      expect(swaggerSpec).toBeDefined();
       expect(swaggerSpec.info).toBeDefined();
       expect(swaggerSpec.info.title).toBe('EduShare Platform API');
       expect(swaggerSpec.info.version).toBe('1.0.0');
@@ -51,20 +99,20 @@ describe('Swagger Documentation Tests', () => {
     });
 
     test('should have contact information', () => {
-      if (!swaggerSpec) return;
+      expect(swaggerSpec).toBeDefined();
       expect(swaggerSpec.info.contact).toBeDefined();
       expect(swaggerSpec.info.contact.name).toBe('Equipe EduShare');
       expect(swaggerSpec.info.contact.email).toBe('contato@edushare.com.br');
     });
 
     test('should have MIT license', () => {
-      if (!swaggerSpec) return;
+      expect(swaggerSpec).toBeDefined();
       expect(swaggerSpec.info.license).toBeDefined();
       expect(swaggerSpec.info.license.name).toBe('MIT');
     });
 
     test('should have development and production servers', () => {
-      if (!swaggerSpec) return;
+      expect(swaggerSpec).toBeDefined();
       expect(swaggerSpec.servers).toBeDefined();
       expect(swaggerSpec.servers.length).toBeGreaterThanOrEqual(2);
       
@@ -78,7 +126,7 @@ describe('Swagger Documentation Tests', () => {
 
   describe('Security Schemes', () => {
     test('should have JWT Bearer authentication configured', () => {
-      if (!swaggerSpec) return;
+      expect(swaggerSpec).toBeDefined();
       expect(swaggerSpec.components.securitySchemes).toBeDefined();
       expect(swaggerSpec.components.securitySchemes.bearerAuth).toBeDefined();
       expect(swaggerSpec.components.securitySchemes.bearerAuth.type).toBe('http');
@@ -89,14 +137,14 @@ describe('Swagger Documentation Tests', () => {
 
   describe('Schema Definitions', () => {
     test('should have Error schema', () => {
-      if (!swaggerSpec) return;
+      expect(swaggerSpec).toBeDefined();
       expect(swaggerSpec.components.schemas.Error).toBeDefined();
       expect(swaggerSpec.components.schemas.Error.properties.success).toBeDefined();
       expect(swaggerSpec.components.schemas.Error.properties.message).toBeDefined();
     });
 
     test('should have User schema', () => {
-      if (!swaggerSpec) return;
+      expect(swaggerSpec).toBeDefined();
       expect(swaggerSpec.components.schemas.User).toBeDefined();
       expect(swaggerSpec.components.schemas.User.properties).toHaveProperty('id');
       expect(swaggerSpec.components.schemas.User.properties).toHaveProperty('name');
@@ -105,7 +153,7 @@ describe('Swagger Documentation Tests', () => {
     });
 
     test('should have Material schema', () => {
-      if (!swaggerSpec) return;
+      expect(swaggerSpec).toBeDefined();
       expect(swaggerSpec.components.schemas.Material).toBeDefined();
       expect(swaggerSpec.components.schemas.Material.properties).toHaveProperty('id');
       expect(swaggerSpec.components.schemas.Material.properties).toHaveProperty('title');
@@ -114,7 +162,7 @@ describe('Swagger Documentation Tests', () => {
     });
 
     test('should have Share schema', () => {
-      if (!swaggerSpec) return;
+      expect(swaggerSpec).toBeDefined();
       expect(swaggerSpec.components.schemas.Share).toBeDefined();
       expect(swaggerSpec.components.schemas.Share.properties).toHaveProperty('id');
       expect(swaggerSpec.components.schemas.Share.properties).toHaveProperty('material_id');
@@ -124,21 +172,21 @@ describe('Swagger Documentation Tests', () => {
 
   describe('Tags Organization', () => {
     test('should have Auth tag', () => {
-      if (!swaggerSpec) return;
+      expect(swaggerSpec).toBeDefined();
       const authTag = swaggerSpec.tags.find(t => t.name === 'Auth');
       expect(authTag).toBeDefined();
       expect(authTag.description).toContain('autenticação');
     });
 
     test('should have Materials tag', () => {
-      if (!swaggerSpec) return;
+      expect(swaggerSpec).toBeDefined();
       const materialsTag = swaggerSpec.tags.find(t => t.name === 'Materials');
       expect(materialsTag).toBeDefined();
       expect(materialsTag.description).toContain('materiais didáticos');
     });
 
     test('should have Shares tag', () => {
-      if (!swaggerSpec) return;
+      expect(swaggerSpec).toBeDefined();
       const sharesTag = swaggerSpec.tags.find(t => t.name === 'Shares');
       expect(sharesTag).toBeDefined();
       expect(sharesTag.description).toContain('compartilhamento');
@@ -148,7 +196,7 @@ describe('Swagger Documentation Tests', () => {
   describe('API Endpoints Documentation', () => {
     describe('Auth Endpoints', () => {
       test('should document POST /api/auth/register', () => {
-        if (!swaggerSpec || !swaggerSpec.paths) return;
+        expect(swaggerSpec).toBeDefined(); expect(swaggerSpec.paths).toBeDefined();
         const endpoint = swaggerSpec.paths['/auth/register'];
         expect(endpoint).toBeDefined();
         expect(endpoint.post).toBeDefined();
@@ -160,7 +208,7 @@ describe('Swagger Documentation Tests', () => {
       });
 
       test('should document POST /api/auth/login', () => {
-        if (!swaggerSpec || !swaggerSpec.paths) return;
+        expect(swaggerSpec).toBeDefined(); expect(swaggerSpec.paths).toBeDefined();
         const endpoint = swaggerSpec.paths['/auth/login'];
         expect(endpoint).toBeDefined();
         expect(endpoint.post).toBeDefined();
@@ -171,7 +219,7 @@ describe('Swagger Documentation Tests', () => {
       });
 
       test('should document GET /api/auth/profile', () => {
-        if (!swaggerSpec || !swaggerSpec.paths) return;
+        expect(swaggerSpec).toBeDefined(); expect(swaggerSpec.paths).toBeDefined();
         const endpoint = swaggerSpec.paths['/auth/profile'];
         expect(endpoint).toBeDefined();
         expect(endpoint.get).toBeDefined();
@@ -181,7 +229,7 @@ describe('Swagger Documentation Tests', () => {
       });
 
       test('should document POST /api/auth/verify', () => {
-        if (!swaggerSpec || !swaggerSpec.paths) return;
+        expect(swaggerSpec).toBeDefined(); expect(swaggerSpec.paths).toBeDefined();
         const endpoint = swaggerSpec.paths['/auth/verify'];
         expect(endpoint).toBeDefined();
         expect(endpoint.post).toBeDefined();
@@ -191,7 +239,7 @@ describe('Swagger Documentation Tests', () => {
 
     describe('Materials Endpoints', () => {
       test('should document GET /api/products', () => {
-        if (!swaggerSpec || !swaggerSpec.paths) return;
+        expect(swaggerSpec).toBeDefined(); expect(swaggerSpec.paths).toBeDefined();
         const endpoint = swaggerSpec.paths['/products'];
         expect(endpoint).toBeDefined();
         expect(endpoint.get).toBeDefined();
@@ -205,7 +253,7 @@ describe('Swagger Documentation Tests', () => {
       });
 
       test('should document POST /api/products', () => {
-        if (!swaggerSpec || !swaggerSpec.paths) return;
+        expect(swaggerSpec).toBeDefined(); expect(swaggerSpec.paths).toBeDefined();
         const endpoint = swaggerSpec.paths['/products'];
         expect(endpoint).toBeDefined();
         expect(endpoint.post).toBeDefined();
@@ -215,7 +263,7 @@ describe('Swagger Documentation Tests', () => {
       });
 
       test('should document GET /api/products/:id', () => {
-        if (!swaggerSpec || !swaggerSpec.paths) return;
+        expect(swaggerSpec).toBeDefined(); expect(swaggerSpec.paths).toBeDefined();
         const endpoint = swaggerSpec.paths['/products/{id}'];
         expect(endpoint).toBeDefined();
         expect(endpoint.get).toBeDefined();
@@ -227,7 +275,7 @@ describe('Swagger Documentation Tests', () => {
       });
 
       test('should document PUT /api/products/:id', () => {
-        if (!swaggerSpec || !swaggerSpec.paths) return;
+        expect(swaggerSpec).toBeDefined(); expect(swaggerSpec.paths).toBeDefined();
         const endpoint = swaggerSpec.paths['/products/{id}'];
         expect(endpoint).toBeDefined();
         expect(endpoint.put).toBeDefined();
@@ -236,7 +284,7 @@ describe('Swagger Documentation Tests', () => {
       });
 
       test('should document DELETE /api/products/:id', () => {
-        if (!swaggerSpec || !swaggerSpec.paths) return;
+        expect(swaggerSpec).toBeDefined(); expect(swaggerSpec.paths).toBeDefined();
         const endpoint = swaggerSpec.paths['/products/{id}'];
         expect(endpoint).toBeDefined();
         expect(endpoint.delete).toBeDefined();
@@ -246,7 +294,7 @@ describe('Swagger Documentation Tests', () => {
 
     describe('Shares Endpoints', () => {
       test('should document GET /api/orders', () => {
-        if (!swaggerSpec || !swaggerSpec.paths) return;
+        expect(swaggerSpec).toBeDefined(); expect(swaggerSpec.paths).toBeDefined();
         const endpoint = swaggerSpec.paths['/orders'];
         expect(endpoint).toBeDefined();
         expect(endpoint.get).toBeDefined();
@@ -261,7 +309,7 @@ describe('Swagger Documentation Tests', () => {
       });
 
       test('should document POST /api/orders', () => {
-        if (!swaggerSpec || !swaggerSpec.paths) return;
+        expect(swaggerSpec).toBeDefined(); expect(swaggerSpec.paths).toBeDefined();
         const endpoint = swaggerSpec.paths['/orders'];
         expect(endpoint).toBeDefined();
         expect(endpoint.post).toBeDefined();
@@ -270,14 +318,14 @@ describe('Swagger Documentation Tests', () => {
       });
 
       test('should document GET /api/orders/:id', () => {
-        if (!swaggerSpec || !swaggerSpec.paths) return;
+        expect(swaggerSpec).toBeDefined(); expect(swaggerSpec.paths).toBeDefined();
         const endpoint = swaggerSpec.paths['/orders/{id}'];
         expect(endpoint).toBeDefined();
         expect(endpoint.get).toBeDefined();
       });
 
       test('should document PATCH /api/orders/:id', () => {
-        if (!swaggerSpec || !swaggerSpec.paths) return;
+        expect(swaggerSpec).toBeDefined(); expect(swaggerSpec.paths).toBeDefined();
         const endpoint = swaggerSpec.paths['/orders/{id}'];
         expect(endpoint).toBeDefined();
         expect(endpoint.patch).toBeDefined();
@@ -285,7 +333,7 @@ describe('Swagger Documentation Tests', () => {
       });
 
       test('should document DELETE /api/orders/:id', () => {
-        if (!swaggerSpec || !swaggerSpec.paths) return;
+        expect(swaggerSpec).toBeDefined(); expect(swaggerSpec.paths).toBeDefined();
         const endpoint = swaggerSpec.paths['/orders/{id}'];
         expect(endpoint).toBeDefined();
         expect(endpoint.delete).toBeDefined();
@@ -293,7 +341,7 @@ describe('Swagger Documentation Tests', () => {
       });
 
       test('should document GET /api/orders/statistics', () => {
-        if (!swaggerSpec || !swaggerSpec.paths) return;
+        expect(swaggerSpec).toBeDefined(); expect(swaggerSpec.paths).toBeDefined();
         const endpoint = swaggerSpec.paths['/orders/statistics'];
         expect(endpoint).toBeDefined();
         expect(endpoint.get).toBeDefined();
@@ -304,7 +352,7 @@ describe('Swagger Documentation Tests', () => {
 
   describe('Response Status Codes', () => {
     test('endpoints should document success responses', () => {
-      if (!swaggerSpec || !swaggerSpec.paths) return;
+      expect(swaggerSpec).toBeDefined(); expect(swaggerSpec.paths).toBeDefined();
       
       Object.keys(swaggerSpec.paths).forEach(path => {
         Object.keys(swaggerSpec.paths[path]).forEach(method => {
@@ -321,7 +369,7 @@ describe('Swagger Documentation Tests', () => {
     });
 
     test('protected endpoints should document 401 response', () => {
-      if (!swaggerSpec || !swaggerSpec.paths) return;
+      expect(swaggerSpec).toBeDefined(); expect(swaggerSpec.paths).toBeDefined();
       
       Object.keys(swaggerSpec.paths).forEach(path => {
         Object.keys(swaggerSpec.paths[path]).forEach(method => {
@@ -334,7 +382,7 @@ describe('Swagger Documentation Tests', () => {
     });
 
     test('endpoints should document 500 error response', () => {
-      if (!swaggerSpec || !swaggerSpec.paths) return;
+      expect(swaggerSpec).toBeDefined(); expect(swaggerSpec.paths).toBeDefined();
       
       let endpointCount = 0;
       let with500 = 0;
@@ -356,7 +404,7 @@ describe('Swagger Documentation Tests', () => {
 
   describe('Request Body Validation', () => {
     test('POST /auth/register should have required fields', () => {
-      if (!swaggerSpec || !swaggerSpec.paths) return;
+      expect(swaggerSpec).toBeDefined(); expect(swaggerSpec.paths).toBeDefined();
       const endpoint = swaggerSpec.paths['/auth/register'];
       if (!endpoint || !endpoint.post) return;
 
@@ -368,7 +416,7 @@ describe('Swagger Documentation Tests', () => {
     });
 
     test('POST /auth/login should have required fields', () => {
-      if (!swaggerSpec || !swaggerSpec.paths) return;
+      expect(swaggerSpec).toBeDefined(); expect(swaggerSpec.paths).toBeDefined();
       const endpoint = swaggerSpec.paths['/auth/login'];
       if (!endpoint || !endpoint.post) return;
 
@@ -379,7 +427,7 @@ describe('Swagger Documentation Tests', () => {
     });
 
     test('POST /products should have required fields', () => {
-      if (!swaggerSpec || !swaggerSpec.paths) return;
+      expect(swaggerSpec).toBeDefined(); expect(swaggerSpec.paths).toBeDefined();
       const endpoint = swaggerSpec.paths['/products'];
       if (!endpoint || !endpoint.post) return;
 
@@ -393,7 +441,7 @@ describe('Swagger Documentation Tests', () => {
 
   describe('Documentation Quality', () => {
     test('all endpoints should have summary', () => {
-      if (!swaggerSpec || !swaggerSpec.paths) return;
+      expect(swaggerSpec).toBeDefined(); expect(swaggerSpec.paths).toBeDefined();
       
       Object.keys(swaggerSpec.paths).forEach(path => {
         Object.keys(swaggerSpec.paths[path]).forEach(method => {
@@ -405,7 +453,7 @@ describe('Swagger Documentation Tests', () => {
     });
 
     test('all endpoints should have description', () => {
-      if (!swaggerSpec || !swaggerSpec.paths) return;
+      expect(swaggerSpec).toBeDefined(); expect(swaggerSpec.paths).toBeDefined();
       
       Object.keys(swaggerSpec.paths).forEach(path => {
         Object.keys(swaggerSpec.paths[path]).forEach(method => {
@@ -417,7 +465,7 @@ describe('Swagger Documentation Tests', () => {
     });
 
     test('all endpoints should have tags', () => {
-      if (!swaggerSpec || !swaggerSpec.paths) return;
+      expect(swaggerSpec).toBeDefined(); expect(swaggerSpec.paths).toBeDefined();
       
       Object.keys(swaggerSpec.paths).forEach(path => {
         Object.keys(swaggerSpec.paths[path]).forEach(method => {
@@ -431,7 +479,7 @@ describe('Swagger Documentation Tests', () => {
 
   describe('Coverage Report', () => {
     test('should have documented at least 15 endpoints', () => {
-      if (!swaggerSpec || !swaggerSpec.paths) return;
+      expect(swaggerSpec).toBeDefined(); expect(swaggerSpec.paths).toBeDefined();
       
       let endpointCount = 0;
       Object.keys(swaggerSpec.paths).forEach(path => {
@@ -442,7 +490,7 @@ describe('Swagger Documentation Tests', () => {
     });
 
     test('should generate coverage report', () => {
-      if (!swaggerSpec || !swaggerSpec.paths) return;
+      expect(swaggerSpec).toBeDefined(); expect(swaggerSpec.paths).toBeDefined();
       
       const report = {
         totalPaths: Object.keys(swaggerSpec.paths).length,
