@@ -1,6 +1,6 @@
 # EduShare - Plataforma de Auxílio aos Professores do Ensino Público
 
-[![CI/CD](https://github.com/yourusername/edushare-platform/workflows/CI%2FCD%20Pipeline/badge.svg)](https://github.com/yourusername/edushare-platform/actions)
+[![CI/CD](https://github.com/Felipe-Lopes-code/hackathon-microservices/workflows/CI%2FCD%20Pipeline/badge.svg)](https://github.com/Felipe-Lopes-code/hackathon-microservices/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Security: Audited](https://img.shields.io/badge/Security-Audited-green.svg)](AUDIT_REPORT.md)
 [![Performance: Tested](https://img.shields.io/badge/Performance-Tested-blue.svg)](tests/performance.test.js)
@@ -120,8 +120,8 @@ src/
 
 ```bash
 # 1. Clone o repositório
-git clone https://github.com/yourusername/edushare-platform.git
-cd edushare-platform
+git clone https://github.com/Felipe-Lopes-code/hackathon-microservices.git
+cd hackathon-microservices
 
 # 2. Inicie todos os serviços com Docker
 docker-compose up -d

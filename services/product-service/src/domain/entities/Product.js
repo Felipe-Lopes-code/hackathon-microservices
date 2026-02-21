@@ -1,13 +1,13 @@
-// Domain Entity - Product
-class Product {
+// Domain Entity - Material (Didactic Material for teachers)
+class Material {
   constructor({ id, name, description, price, stock, category, imageUrl, createdAt, updatedAt }) {
     this.id = id;
-    this.name = name;
-    this.description = description;
-    this.price = price;
-    this.stock = stock;
-    this.category = category;
-    this.imageUrl = imageUrl;
+    this.name = name;              // Material title
+    this.description = description; // Material description
+    this.price = price;            // Always 0 (free materials)
+    this.stock = stock;            // Download count / availability
+    this.category = category;      // Discipline (Matemática, Português, etc.)
+    this.imageUrl = imageUrl;      // Material thumbnail
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
@@ -40,4 +40,4 @@ class Product {
   }
 }
 
-module.exports = Product;
+module.exports = Material;

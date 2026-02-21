@@ -55,3 +55,47 @@ h1 {
   color: #7f8c8d;
   font-size: 1.1rem;
 }
+
+.hero-section {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 2.5rem 2rem;
+  background: linear-gradient(135deg, #1a5276 0%, #2e86c1 100%);
+  border-radius: 12px;
+  color: white;
+}
+
+.hero-section h1 {
+  color: white;
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.hero-description {
+  color: #d6eaf8;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.filter-select {
+  cursor: pointer;
+  appearance: auto;
+}
+
+.no-materials {
+  text-align: center;
+  padding: 3rem;
+}
+
+.no-materials p {
+  color: #7f8c8d;
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.no-materials-hint {
+  font-size: 0.9rem !important;
+  color: #95a5a6 !important;
+}

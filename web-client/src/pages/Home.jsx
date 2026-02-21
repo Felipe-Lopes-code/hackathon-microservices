@@ -1,29 +1,34 @@
 import { useState, useEffect } from 'react';
-import { productService } from '../services';
+import { materialService } from '../services';
 import { ProductCard } from '../components/ProductCard';
 import './Home.css';
 
+const DISCIPLINAS = [
+  '', 'Matemática', 'Português', 'Ciências', 'História',
+  'Geografia', 'Inglês', 'Educação Física', 'Artes',
+  'Biologia', 'Física', 'Química', 'Filosofia', 'Sociologia',
+];
+
 export const Home = () => {
-  const [products, setProducts] = useState([]);
+  const [materials, setMaterials] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filters, setFilters] = useState({
     category: '',
-    minPrice: '',
-    maxPrice: '',
+    search: '',
   });
 
   useEffect(() => {
-    loadProducts();
+    loadMaterials();
   }, [filters]);
 
-  const loadProducts = async () => {
+  const loadMaterials = async () => {
     try {
       setLoading(true);
-      const response = await productService.getAll(filters);
-      setProducts(response.data);
+      const response = await materialService.getAll(filters);
+      setMaterials(response.data);
     } catch (err) {
-      setError('Erro ao carregar produtos');
+      setError('Erro ao carregar materiais didáticos');
       console.error(err);
     } finally {
       setLoading(false);
@@ -35,49 +40,54 @@ export const Home = () => {
     setFilters((prev) => ({ ...prev, [name]: value }));
   };
 
-  if (loading) return <div className="loading">Carregando...</div>;
+  if (loading) return <div className="loading">Carregando materiais...</div>;
   if (error) return <div className="error">{error}</div>;
 
   return (
     <div className="home">
       <div className="container">
-        <h1>Produtos</h1>
+        <div className="hero-section">
+          <h1>📚 Materiais Didáticos</h1>
+          <p className="hero-description">
+            Encontre, compartilhe e colabore com recursos pedagógicos de qualidade.
+            Uma plataforma feita por professores, para professores da rede pública.
+          </p>
+        </div>
 
         <div className="filters">
-          <input
-            type="text"
+          <select
             name="category"
-            placeholder="Categoria"
             value={filters.category}
             onChange={handleFilterChange}
-            className="filter-input"
-          />
+            className="filter-input filter-select"
+          >
+            {DISCIPLINAS.map((d) => (
+              <option key={d} value={d}>
+                {d === '' ? '📖 Todas as Disciplinas' : d}
+              </option>
+            ))}
+          </select>
           <input
-            type="number"
-            name="minPrice"
-            placeholder="Preço mínimo"
-            value={filters.minPrice}
-            onChange={handleFilterChange}
-            className="filter-input"
-          />
-          <input
-            type="number"
-            name="maxPrice"
-            placeholder="Preço máximo"
-            value={filters.maxPrice}
+            type="text"
+            name="search"
+            placeholder="🔍 Buscar material por nome..."
+            value={filters.search}
             onChange={handleFilterChange}
             className="filter-input"
           />
         </div>
 
         <div className="products-grid">
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
+          {materials.map((material) => (
+            <ProductCard key={material.id} product={material} />
           ))}
         </div>
 
-        {products.length === 0 && (
-          <p className="no-products">Nenhum produto encontrado</p>
+        {materials.length === 0 && (
+          <div className="no-materials">
+            <p>📭 Nenhum material encontrado</p>
+            <p className="no-materials-hint">Tente buscar por outra disciplina ou termo</p>
+          </div>
         )}
       </div>
     </div>

@@ -10,6 +10,45 @@
   color: #7f8c8d;
 }
 
+.empty-library {
+  text-align: center;
+  padding: 3rem;
+}
+
+.empty-library p {
+  color: #7f8c8d;
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.empty-library-hint {
+  font-size: 0.95rem;
+  color: #95a5a6;
+}
+
+.library-subtitle {
+  color: #7f8c8d;
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+}
+
+.library-count {
+  color: #2c3e50;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.item-badge {
+  background-color: #27ae60;
+  color: white;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  margin-left: 0.75rem;
+}
+
 .cart-items {
   margin-bottom: 2rem;
 }

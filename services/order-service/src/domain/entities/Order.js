@@ -1,23 +1,23 @@
-// Domain Entity - Order
-class Order {
+// Domain Entity - Share (Material Sharing between teachers and students)
+class Share {
   constructor({ id, userId, items, totalAmount, status, createdAt, updatedAt }) {
     this.id = id;
-    this.userId = userId;
-    this.items = items || [];
-    this.totalAmount = totalAmount;
-    this.status = status || 'pending';
+    this.userId = userId;           // Teacher ID who initiates the share
+    this.items = items || [];       // Shared materials list
+    this.totalAmount = totalAmount; // Number of materials shared
+    this.status = status || 'pending'; // Share request status
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
 
-  // Order Status Flow: pending -> confirmed -> processing -> shipped -> delivered
+  // Share Status Flow: pending -> confirmed -> processing -> active -> completed
   static STATUSES = {
-    PENDING: 'pending',
-    CONFIRMED: 'confirmed',
-    PROCESSING: 'processing',
-    SHIPPED: 'shipped',
-    DELIVERED: 'delivered',
-    CANCELLED: 'cancelled',
+    PENDING: 'pending',        // Share request submitted
+    CONFIRMED: 'confirmed',    // Share approved
+    PROCESSING: 'processing',  // Share being prepared
+    SHIPPED: 'shipped',        // Share distributed (active)
+    DELIVERED: 'delivered',    // Share completed
+    CANCELLED: 'cancelled',   // Share cancelled
   };
 
   canTransitionTo(newStatus) {
@@ -45,4 +45,4 @@ class Order {
   }
 }
 
-module.exports = Order;
+module.exports = Share;

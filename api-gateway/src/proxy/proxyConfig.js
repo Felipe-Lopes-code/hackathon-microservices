@@ -7,6 +7,15 @@ const services = {
     target: process.env.AUTH_SERVICE_URL,
     pathRewrite: (path) => path.replace('/api/auth', '/api/auth'),
   },
+  materials: {
+    target: process.env.PRODUCT_SERVICE_URL,
+    pathRewrite: (path) => path.replace('/api/materials', '/api/products'),
+  },
+  shares: {
+    target: process.env.ORDER_SERVICE_URL,
+    pathRewrite: (path) => path.replace('/api/shares', '/api/orders'),
+  },
+  // Legacy routes (backward compatibility)
   products: {
     target: process.env.PRODUCT_SERVICE_URL,
     pathRewrite: (path) => path.replace('/api/products', '/api/products'),

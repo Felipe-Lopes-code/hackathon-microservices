@@ -250,12 +250,12 @@ app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
  *                     auth:
  *                       type: string
  *                       example: /api/auth
- *                     products:
+ *                     materials:
  *                       type: string
- *                       example: /api/products
- *                     orders:
+ *                       example: /api/materials
+ *                     shares:
  *                       type: string
- *                       example: /api/orders
+ *                       example: /api/shares
  */
 app.get('/api', (req, res) => {
   res.status(200).json({
@@ -264,15 +264,19 @@ app.get('/api', (req, res) => {
     version: '1.0.0',
     services: {
       auth: '/api/auth',
-      products: '/api/products',
-      orders: '/api/orders',
+      materials: '/api/materials',
+      shares: '/api/shares',
     },
     documentation: '/api/docs',
   });
 });
 
-// Service Proxies
+// Service Proxies - Educational routes
 app.use('/api/auth', createServiceProxy('auth'));
+app.use('/api/materials', createServiceProxy('materials'));
+app.use('/api/shares', createServiceProxy('shares'));
+
+// Legacy routes (backward compatibility with tests)
 app.use('/api/products', createServiceProxy('products'));
 app.use('/api/orders', createServiceProxy('orders'));
 

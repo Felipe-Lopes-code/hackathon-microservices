@@ -11,24 +11,21 @@ export const Header = () => {
     <header className="header">
       <div className="header-container">
         <Link to="/" className="logo">
-          E-Shop
+          📚 EduShare
         </Link>
 
         <nav className="nav">
           <Link to="/" className="nav-link">
-            Produtos
+            Materiais
           </Link>
 
           {isAuthenticated ? (
             <>
-              <Link to="/orders" className="nav-link">
-                Meus Pedidos
+              <Link to="/biblioteca" className="nav-link library-link">
+                📖 Biblioteca
+                {itemCount > 0 && <span className="library-badge">{itemCount}</span>}
               </Link>
-              <Link to="/cart" className="nav-link cart-link">
-                Carrinho
-                {itemCount > 0 && <span className="cart-badge">{itemCount}</span>}
-              </Link>
-              <span className="user-name">Olá, {user?.name}</span>
+              <span className="user-name">Olá, Prof. {user?.name}</span>
               <button onClick={logout} className="btn btn-secondary">
                 Sair
               </button>

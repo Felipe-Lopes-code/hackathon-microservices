@@ -36,7 +36,12 @@ export const Register = () => {
   return (
     <div className="auth-page">
       <div className="auth-container">
-        <h2>Cadastro</h2>
+        <div className="auth-brand">
+          <span className="auth-logo">📚</span>
+          <h1>EduShare</h1>
+          <p className="auth-subtitle">Plataforma Colaborativa para Professores</p>
+        </div>
+        <h2>Criar Conta de Professor</h2>
         {error && <div className="error-message">{error}</div>}
         
         <form onSubmit={handleSubmit} className="auth-form">

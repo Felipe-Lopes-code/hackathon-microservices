@@ -22,7 +22,7 @@ Este guia descreve como configurar o ambiente de desenvolvimento local.
 ### 1. Clone o repositório
 
 ```bash
-git clone https://github.com/yourusername/hackathon-microservices.git
+git clone https://github.com/Felipe-Lopes-code/hackathon-microservices.git
 cd hackathon-microservices
 ```
 

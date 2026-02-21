@@ -24,7 +24,7 @@ const orderController = new OrderController(createOrderUseCase, orderRepository)
 app.use('/api/orders', createOrderRoutes(orderController));
 
 app.get('/health', (req, res) => {
-  res.status(200).json({ status: 'ok', service: 'order-service' });
+  res.status(200).json({ status: 'ok', service: 'share-service' });
 });
 
 // Error Handler
@@ -37,7 +37,7 @@ app.use((err, req, res, _next) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Order Service running on port ${PORT}`);
+  console.log(`Share Service (EduShare) running on port ${PORT}`);
 });
 
 module.exports = app;

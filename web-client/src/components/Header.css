@@ -37,11 +37,11 @@
   color: #3498db;
 }
 
-.cart-link {
+.library-link {
   position: relative;
 }
 
-.cart-badge {
+.library-badge {
   position: absolute;
   top: -8px;
   right: -12px;

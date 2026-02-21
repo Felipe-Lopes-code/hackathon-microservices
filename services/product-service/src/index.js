@@ -51,7 +51,7 @@ app.use((req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Product Service running on port ${PORT}`);
+  console.log(`Material Service (EduShare) running on port ${PORT}`);
 });
 
 module.exports = app;

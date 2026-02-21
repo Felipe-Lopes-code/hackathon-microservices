@@ -1,4 +1,4 @@
-// Product Controller
+// Material Controller - Manages didactic materials for teachers
 class ProductController {
   constructor(createUseCase, getAllUseCase, updateUseCase, productRepository) {
     this.createUseCase = createUseCase;
@@ -54,7 +54,7 @@ class ProductController {
       if (!product) {
         return res.status(404).json({
           success: false,
-          message: 'Product not found',
+          message: 'Material not found',
         });
       }
 
@@ -77,7 +77,7 @@ class ProductController {
       if (!product) {
         return res.status(404).json({
           success: false,
-          message: 'Product not found',
+          message: 'Material not found',
         });
       }
 
@@ -100,13 +100,13 @@ class ProductController {
       if (!deleted) {
         return res.status(404).json({
           success: false,
-          message: 'Product not found',
+          message: 'Material not found',
         });
       }
 
       res.status(200).json({
         success: true,
-        message: 'Product deleted successfully',
+        message: 'Material deleted successfully',
       });
     } catch (error) {
       res.status(500).json({

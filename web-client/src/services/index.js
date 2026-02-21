@@ -39,52 +39,52 @@ export const authService = {
   },
 };
 
-export const productService = {
+export const materialService = {
   async getAll(filters = {}) {
     const params = new URLSearchParams(filters);
-    const response = await api.get(`/products?${params}`);
+    const response = await api.get(`/materials?${params}`);
     return response.data;
   },
 
   async getById(id) {
-    const response = await api.get(`/products/${id}`);
+    const response = await api.get(`/materials/${id}`);
     return response.data;
   },
 
-  async create(productData) {
-    const response = await api.post('/products', productData);
+  async create(materialData) {
+    const response = await api.post('/materials', materialData);
     return response.data;
   },
 
-  async update(id, productData) {
-    const response = await api.put(`/products/${id}`, productData);
+  async update(id, materialData) {
+    const response = await api.put(`/materials/${id}`, materialData);
     return response.data;
   },
 
   async delete(id) {
-    const response = await api.delete(`/products/${id}`);
+    const response = await api.delete(`/materials/${id}`);
     return response.data;
   },
 };
 
-export const orderService = {
-  async create(orderData) {
-    const response = await api.post('/orders', orderData);
+export const shareService = {
+  async create(shareData) {
+    const response = await api.post('/shares', shareData);
     return response.data;
   },
 
-  async getMyOrders() {
-    const response = await api.get('/orders/my-orders');
+  async getMyShares() {
+    const response = await api.get('/shares/my-orders');
     return response.data;
   },
 
   async getById(id) {
-    const response = await api.get(`/orders/${id}`);
+    const response = await api.get(`/shares/${id}`);
     return response.data;
   },
 
   async updateStatus(id, status) {
-    const response = await api.patch(`/orders/${id}/status`, { status });
+    const response = await api.patch(`/shares/${id}/status`, { status });
     return response.data;
   },
 };

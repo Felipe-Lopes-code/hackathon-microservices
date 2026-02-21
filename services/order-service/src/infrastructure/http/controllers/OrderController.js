@@ -43,11 +43,11 @@ class OrderController {
       if (!order) {
         return res.status(404).json({
           success: false,
-          message: 'Order not found',
+          message: 'Share not found',
         });
       }
 
-      // Check if user owns the order
+      // Check if user owns the share
       if (order.userId !== req.user.id && req.user.role !== 'admin') {
         return res.status(403).json({
           success: false,
@@ -75,7 +75,7 @@ class OrderController {
       if (!order) {
         return res.status(404).json({
           success: false,
-          message: 'Order not found',
+          message: 'Share not found',
         });
       }
 

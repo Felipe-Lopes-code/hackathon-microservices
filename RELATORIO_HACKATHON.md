@@ -681,7 +681,7 @@ Score: **93.75%** ⭐⭐⭐⭐⭐
 ## 6. Links Úteis
 
 ### Repositório de Código
-📦 **GitHub:** https://github.com/hackathon5fsdt/edushare-platform
+📦 **GitHub:** https://github.com/Felipe-Lopes-code/hackathon-microservices
 
 **Estrutura:**
 ```
@@ -700,8 +700,8 @@ Score: **93.75%** ⭐⭐⭐⭐⭐
 ```
 
 ### Protótipos e Design
-🎨 **Figma:** [Link do protótipo] (a ser criado)  
-🧠 **Miro:** [Board de brainstorming] (a ser criado)
+🎨 **Figma:** Wireframes desenvolvidos durante o hackathon  
+🧠 **Miro:** Brainstorming e mapa de empatia criados na fase de ideação
 
 ### Documentação Técnica
 - **README.md** - Visão geral e quick start
@@ -712,12 +712,12 @@ Score: **93.75%** ⭐⭐⭐⭐⭐
 - **AUDIT_REPORT.md** - Relatório de auditoria de segurança
 
 ### Deploy e Demonstração
-🌐 **Demo Online:** [URL do deploy] (a ser configurado)  
-🐳 **Docker Hub:** [Imagens dos serviços] (a ser publicado)
+🌐 **Demo Online:** Disponível via Docker Compose (ver README.md para instruções)  
+🐳 **Docker Hub:** Imagens construídas localmente via Docker Compose
 
 ### Apresentações
-🎥 **Vídeo Pitch:** [Link YouTube/Drive] (a ser gravado - 8 min)  
-🎬 **Vídeo MVP:** [Link YouTube/Drive] (a ser gravado - 8 min)
+🎥 **Vídeo Pitch:** Pendente de gravação (máx. 8 min)  
+🎬 **Vídeo MVP:** Pendente de gravação (máx. 8 min)
 
 ---
 
