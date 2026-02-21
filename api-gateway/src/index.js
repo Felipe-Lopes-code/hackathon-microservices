@@ -4,6 +4,7 @@ const helmet = require('helmet');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 const morgan = require('morgan');
+const path = require('path');
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 const { createServiceProxy } = require('./proxy/proxyConfig');
@@ -159,14 +160,18 @@ const swaggerDefinition = {
 };
 
 const swaggerOptions = {
-  swaggerDefinition,
+  definition: swaggerDefinition,
   apis: [
-    './src/**/*.js',
-    './src/swagger/*.js'
-  ], // Path to files with JSDoc annotations
+    path.join(__dirname, 'swagger', '*.js'),
+    path.join(__dirname, 'index.js')
+  ],
 };
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
+
+// Debug: Log swagger spec info
+console.log('Swagger paths count:', Object.keys(swaggerSpec.paths || {}).length);
+console.log('Swagger tags count:', (swaggerSpec.tags || []).length);
 
 // Security Middlewares
 app.use(helmet());
