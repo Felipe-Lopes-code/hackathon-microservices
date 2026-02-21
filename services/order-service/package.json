@@ -1,7 +1,7 @@
 {
-  "name": "order-service",
+  "name": "share-service",
   "version": "1.0.0",
-  "description": "Serviço de Gestão de Pedidos",
+  "description": "EduShare - Serviço de Compartilhamento de Materiais",
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",

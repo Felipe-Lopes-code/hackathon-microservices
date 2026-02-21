@@ -1,7 +1,7 @@
 {
-  "name": "product-service",
+  "name": "material-service",
   "version": "1.0.0",
-  "description": "Serviço de Catálogo de Produtos",
+  "description": "EduShare - Serviço de Catálogo de Materiais Didáticos",
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",

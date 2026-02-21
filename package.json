@@ -1,7 +1,7 @@
 {
-  "name": "hackathon-microservices",
+  "name": "edushare-platform",
   "version": "1.0.0",
-  "description": "Sistema de E-commerce com Microserviços - Clean Architecture",
+  "description": "EduShare - Plataforma de Auxílio aos Professores do Ensino Público com Microserviços",
   "private": true,
   "workspaces": [
     "services/*",
@@ -19,13 +19,17 @@
     "format": "prettier --write \"**/*.{js,jsx,json,md}\""
   },
   "keywords": [
+    "education",
+    "edtech",
+    "teachers",
+    "materials",
     "microservices",
     "clean-architecture",
     "nodejs",
     "react",
     "docker"
   ],
-  "author": "Hackathon Team",
+  "author": "Hackathon 5FSDT Team - Postech",
   "license": "MIT",
   "devDependencies": {
     "eslint": "^8.56.0",
