@@ -61,7 +61,7 @@ services:
       - hackathon-network
     restart: unless-stopped
 
-  # Product Service
+  # Material Service (EduShare)
   product-service:
     build:
       context: ./services/product-service
@@ -87,7 +87,7 @@ services:
       - hackathon-network
     restart: unless-stopped
 
-  # Order Service
+  # Share Service (EduShare)
   order-service:
     build:
       context: ./services/order-service

@@ -61,7 +61,7 @@ npm test
 npm run test:watch
 ```
 
-#### Product Service
+#### Material Service (product-service)
 
 ```bash
 cd services/product-service
@@ -70,7 +70,7 @@ cp .env.example .env
 npm run dev
 ```
 
-#### Order Service
+#### Share Service (order-service)
 
 ```bash
 cd services/order-service
@@ -174,7 +174,7 @@ Crie `.vscode/launch.json`:
     {
       "type": "node",
       "request": "launch",
-      "name": "Debug Product Service",
+      "name": "Debug Material Service",
       "skipFiles": ["<node_internals>/**"],
       "program": "${workspaceFolder}/services/product-service/src/index.js",
       "cwd": "${workspaceFolder}/services/product-service",
@@ -327,31 +327,31 @@ JWT_SECRET=CHANGE_ME_USE_RANDOM_STRING_MIN_32_CHARS
 JWT_EXPIRES_IN=24h
 ```
 
-### Product Service
+### Material Service (product-service)
 
 ```env
 PORT=3002
 NODE_ENV=development
 DB_HOST=localhost
 DB_PORT=5432
-DB_NAME=product_db
+DB_NAME=material_db
 DB_USER=postgres
 DB_PASSWORD=CHANGE_ME_STRONG_PASSWORD
 AUTH_SERVICE_URL=http://localhost:3001
 ```
 
-### Order Service
+### Share Service (order-service)
 
 ```env
 PORT=3003
 NODE_ENV=development
 DB_HOST=localhost
 DB_PORT=5432
-DB_NAME=order_db
+DB_NAME=share_db
 DB_USER=postgres
 DB_PASSWORD=CHANGE_ME_STRONG_PASSWORD
 AUTH_SERVICE_URL=http://localhost:3001
-PRODUCT_SERVICE_URL=http://localhost:3002
+MATERIAL_SERVICE_URL=http://localhost:3002
 ```
 
 ## Recursos Adicionais

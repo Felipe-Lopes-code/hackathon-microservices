@@ -28,58 +28,58 @@ curl -X POST http://localhost:3000/api/auth/login \
 TOKEN="eyJhbGciOiJIUzI1NiIs..."
 ```
 
-### 2. Teste de Produtos
+### 2. Teste de Materiais
 
 ```bash
-# Criar produto (requer autenticação)
-curl -X POST http://localhost:3000/api/products \
+# Criar material (requer autenticação)
+curl -X POST http://localhost:3000/api/materials \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer $TOKEN" \
   -d '{
-    "name": "Notebook Dell",
-    "description": "Notebook i7, 16GB RAM, 512GB SSD",
-    "price": 4500.00,
-    "stock": 10,
-    "category": "Eletrônicos",
+    "name": "Lista de Exercícios - Geometria",
+    "description": "Exercícios de geometria espacial para 1º ano do ensino médio",
+    "price": 0,
+    "stock": 999,
+    "category": "Matemática",
     "imageUrl": "https://via.placeholder.com/300"
   }'
 
-# Listar produtos (público)
-curl http://localhost:3000/api/products
+# Listar materiais (público)
+curl http://localhost:3000/api/materials
 
-# Filtrar por categoria
-curl "http://localhost:3000/api/products?category=Eletrônicos"
+# Filtrar por disciplina
+curl "http://localhost:3000/api/materials?category=Matemática"
 
-# Filtrar por preço
-curl "http://localhost:3000/api/products?minPrice=1000&maxPrice=5000"
+# Buscar materiais
+curl "http://localhost:3000/api/materials?search=geometria"
 ```
 
-### 3. Teste de Pedidos
+### 3. Teste de Compartilhamentos
 
 ```bash
-# Criar pedido
-curl -X POST http://localhost:3000/api/orders \
+# Criar compartilhamento
+curl -X POST http://localhost:3000/api/shares \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer $TOKEN" \
   -d '{
     "items": [
       {
         "productId": 1,
-        "quantity": 2
+        "quantity": 1
       }
     ]
   }'
 
 # Listar meus compartilhamentos
-curl -X GET http://localhost:3000/api/orders/my-orders \
+curl -X GET http://localhost:3000/api/shares/my-orders \
   -H "Authorization: Bearer $TOKEN"
 
-# Ver pedido específico
-curl -X GET http://localhost:3000/api/orders/1 \
+# Ver compartilhamento específico
+curl -X GET http://localhost:3000/api/shares/1 \
   -H "Authorization: Bearer $TOKEN"
 
-# Atualizar status do pedido
-curl -X PATCH http://localhost:3000/api/orders/1/status \
+# Atualizar status do compartilhamento
+curl -X PATCH http://localhost:3000/api/shares/1/status \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer $TOKEN" \
   -d '{
@@ -146,11 +146,11 @@ PRODUCT_RESPONSE=$(curl -s -X POST $API_URL/products \
 echo $PRODUCT_RESPONSE | jq .
 PRODUCT_ID=$(echo $PRODUCT_RESPONSE | jq -r '.data.id')
 
-echo "\n=== Teste 4: Listar Produtos ==="
-curl -s $API_URL/products | jq .
+echo "\n=== Teste 4: Listar Materiais ==="
+curl -s $API_URL/materials | jq .
 
-echo "\n=== Teste 5: Criar Pedido ==="
-ORDER_RESPONSE=$(curl -s -X POST $API_URL/orders \
+echo "\n=== Teste 5: Criar Compartilhamento ==="
+SHARE_RESPONSE=$(curl -s -X POST $API_URL/shares \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer $TOKEN" \
   -d "{
@@ -162,10 +162,10 @@ ORDER_RESPONSE=$(curl -s -X POST $API_URL/orders \
     ]
   }")
 
-echo $ORDER_RESPONSE | jq .
+echo $SHARE_RESPONSE | jq .
 
-echo "\n=== Teste 6: Listar Pedidos ==="
-curl -s -X GET $API_URL/orders/my-orders \
+echo "\n=== Teste 6: Listar Compartilhamentos ==="
+curl -s -X GET $API_URL/shares/my-orders \
   -H "Authorization: Bearer $TOKEN" | jq .
 
 echo "\n=== Testes Concluídos ==="
@@ -229,9 +229,9 @@ curl -X POST http://localhost:3000/api/auth/register \
 - ✅ Registro de usuário
 - ✅ Login de usuário
 - ✅ Autenticação com JWT
-- ✅ CRUD de produtos
-- ✅ Criação de pedidos
-- ✅ Validação de estoque
+- ✅ CRUD de materiais didáticos
+- ✅ Criação de compartilhamentos
+- ✅ Validação de disponibilidade
 - ✅ Rate limiting
 - ✅ Validação de entrada
 - ✅ Autorização baseada em roles

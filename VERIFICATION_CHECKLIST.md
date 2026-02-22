@@ -10,7 +10,7 @@
 - [x] **Azure** - Terraform para ACI, PostgreSQL, Key Vault
 - [x] **React** - Web client completo com hooks e Zustand
 - [ ] **React Native** - Não implementado (opcional)
-- [x] **PostgreSQL** - 3 databases separados (auth_db, product_db, order_db)
+- [x] **PostgreSQL** - 3 databases separados (auth_db, material_db, share_db)
 
 **Score: 7/8 (87.5%)** - React Native é opcional
 
@@ -19,8 +19,8 @@
 ### Arquitetura e Design
 - [x] **Microserviços** - 4 serviços independentes
   - [x] Auth Service (porta 3001)
-  - [x] Product Service (porta 3002)
-  - [x] Order Service (porta 3003)
+  - [x] Material Service (porta 3002)
+  - [x] Share Service (porta 3003)
   - [x] API Gateway (porta 3000)
 - [x] **Clean Architecture**
   - [x] Domain Layer (entities, interfaces)
@@ -80,17 +80,17 @@
   - [x] Login (POST /api/auth/login)
   - [x] Perfil (GET /api/auth/profile)
   - [x] Verificação de token
-- [x] **Gestão de Produtos**
-  - [x] Listar produtos (GET /api/products)
-  - [x] Buscar por ID (GET /api/products/:id)
-  - [x] Criar produto (POST /api/products)
-  - [x] Atualizar produto (PUT /api/products/:id)
-  - [x] Filtros (categoria, preço)
-- [x] **Gestão de Pedidos**
-  - [x] Criar pedido (POST /api/orders)
-  - [x] Listar pedidos (GET /api/orders)
-  - [x] Buscar pedido (GET /api/orders/:id)
-  - [x] Atualizar status (PUT /api/orders/:id/status)
+- [x] **Gestão de Materiais**
+  - [x] Listar materiais (GET /api/materials)
+  - [x] Buscar por ID (GET /api/materials/:id)
+  - [x] Criar material (POST /api/materials)
+  - [x] Atualizar material (PUT /api/materials/:id)
+  - [x] Filtros (disciplina, nível)
+- [x] **Gestão de Compartilhamentos**
+  - [x] Criar compartilhamento (POST /api/shares)
+  - [x] Listar compartilhamentos (GET /api/shares)
+  - [x] Buscar compartilhamento (GET /api/shares/:id)
+  - [x] Atualizar status (PUT /api/shares/:id/status)
 - [x] **Biblioteca de Materiais**
   - [x] Adicionar à biblioteca (frontend)
   - [x] Remover da biblioteca (frontend)
@@ -104,12 +104,12 @@
 ### Testes
 - [x] **Testes Unitários**
   - [x] Auth Service (RegisterUserUseCase)
-  - [ ] Product Service (necessita expansão)
-  - [ ] Order Service (necessita expansão)
+  - [ ] Material Service (necessita expansão)
+  - [ ] Share Service (necessita expansão)
 - [x] **Testes de Integração**
   - [x] Auth Service (auth.integration.test.js)
-  - [ ] Product Service (recomendado)
-  - [ ] Order Service (recomendado)
+  - [ ] Material Service (recomendado)
+  - [ ] Share Service (recomendado)
 - [x] **Testes de Segurança**
   - [x] SQL Injection (10 payloads)
   - [x] XSS (8 payloads)
@@ -219,7 +219,7 @@
 - [ ] React Native app (opcional no escopo)
 - [ ] Testes E2E com Cypress
 - [ ] Prometheus + Grafana
-- [ ] Testes adicionais para Product/Order Services
+- [ ] Testes adicionais para Material/Share Services
 
 ### Melhorias Futuras
 - [ ] Message Queue (RabbitMQ/Kafka)

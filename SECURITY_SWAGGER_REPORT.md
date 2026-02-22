@@ -42,10 +42,10 @@ Total: 43 vulnerabilidades
 # Auth Service
 npm install jest@latest --save-dev  # 19.x → 30.2.0
 
-# Product Service
+# Material Service
 npm install jest@latest --save-dev  # 25.x → 30.2.0
 
-# Order Service
+# Share Service
 npm install jest@latest --save-dev  # 25.x → 30.2.0
 
 # Tests Directory

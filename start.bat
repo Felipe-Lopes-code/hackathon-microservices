@@ -22,12 +22,12 @@ if not exist "services\auth-service\.env" (
 
 if not exist "services\product-service\.env" (
     copy "services\product-service\.env.example" "services\product-service\.env"
-    echo Product service .env criado
+    echo Material service .env criado
 )
 
 if not exist "services\order-service\.env" (
     copy "services\order-service\.env.example" "services\order-service\.env"
-    echo Order service .env criado
+    echo Share service .env criado
 )
 
 if not exist "api-gateway\.env" (
@@ -57,8 +57,8 @@ echo URLs disponiveis:
 echo    Web Client:    http://localhost
 echo    API Gateway:   http://localhost:3000
 echo    Auth Service:  http://localhost:3001
-echo    Product Service: http://localhost:3002
-echo    Order Service: http://localhost:3003
+echo    Material Service: http://localhost:3002
+echo    Share Service:    http://localhost:3003
 echo.
 echo Para ver logs: docker-compose -f docker-compose-prod.yml logs -f
 echo Para parar: docker-compose -f docker-compose-prod.yml down

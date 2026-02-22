@@ -228,18 +228,18 @@ Infrastructure → Application → Domain
 
 ### 3.3 Mesma Estrutura em Outros Serviços
 
-**Product Service (Material Service):**
+**Material Service:**
 ```
-✅ Domain: Product entity com business rules
-✅ Application: CreateProductUseCase, GetAllProductsUseCase, UpdateProductUseCase
-✅ Infrastructure: PostgresProductRepository
+✅ Domain: Material entity com business rules
+✅ Application: CreateMaterialUseCase, GetAllMaterialsUseCase, UpdateMaterialUseCase
+✅ Infrastructure: PostgresMaterialRepository
 ```
 
-**Order Service (Share Service):**
+**Share Service:**
 ```
-✅ Domain: Order entity com state machine
-✅ Application: CreateOrderUseCase
-✅ Infrastructure: PostgresOrderRepository
+✅ Domain: Share entity com state machine
+✅ Application: CreateShareUseCase
+✅ Infrastructure: PostgresShareRepository
 ```
 
 **Score:** 95/100
@@ -274,7 +274,7 @@ class PostgresAuthRepository extends IAuthRepository {
 - ✅ Facilita troca de banco de dados
 - ✅ Melhora testabilidade (pode usar mock repositories)
 
-**Uso:** Auth, Product, Order services
+**Uso:** Auth, Material, Share services
 
 ---
 

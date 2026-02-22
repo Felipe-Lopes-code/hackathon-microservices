@@ -129,8 +129,8 @@ Infrastructure     ✅ Implementações concretas
 **Cobertura Total Estimada:** ~75%
 
 ⚠️ **Expandir:**
-- Product Service: adicionar testes unitários
-- Order Service: adicionar testes de integração
+- Material Service: adicionar testes unitários
+- Share Service: adicionar testes de integração
 - E2E: implementar com Cypress
 
 ---
@@ -270,15 +270,15 @@ Infrastructure     ✅ Implementações concretas
 2. **Cache Não Integrado**
    - ❌ Todas requisições vão ao banco
    - ✅ Solução criada: `cacheManager.js`
-   - 📝 Ação: integrar no Product Service
+   - 📝 Ação: integrar no Material Service
 
 3. **Cobertura de Testes**
-   - ❌ Product/Order services precisam de mais testes
+   - ❌ Material/Share services precisam de mais testes
    - ✅ Framework de teste criado
    - 📝 Ação: expandir testes unitários
 
 4. **N+1 Queries**
-   - ❌ Order Service faz chamadas individuais
+   - ❌ Share Service faz chamadas individuais
    - 📝 Recomendação: batch endpoint
 
 ---
@@ -327,7 +327,7 @@ Infrastructure     ✅ Implementações concretas
 
 1. **Integrar Cache** (2 dias)
    ```javascript
-   // Product Service
+   // Material Service
    const cached = await cacheManager.getOrSet(
      CacheKeys.product(id),
      () => productRepository.findById(id),
@@ -351,8 +351,8 @@ Infrastructure     ✅ Implementações concretas
 ### ⚡ Médio Prazo (Próximo Mês)
 
 4. **Expandir Testes** (3 dias)
-   - Product Service: unitários + integração
-   - Order Service: unitários + integração
+   - Material Service: unitários + integração
+   - Share Service: unitários + integração
    - Cobertura alvo: >80%
 
 5. **Implementar Monitoramento** (2 dias)
@@ -362,7 +362,7 @@ Infrastructure     ✅ Implementações concretas
 
 6. **Batch Endpoints** (2 dias)
    ```javascript
-   POST /api/products/batch
+   POST /api/materials/batch
    // Evita N+1 queries
    ```
 

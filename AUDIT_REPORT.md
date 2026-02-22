@@ -250,7 +250,7 @@ class CacheManager {
 
 **Uso Recomendado:**
 ```javascript
-// Product Service
+// Material Service
 const cachedProduct = await cacheManager.getOrSet(
   CacheKeys.product(id),
   () => productRepository.findProductById(id),
@@ -269,19 +269,19 @@ const cachedProduct = await cacheManager.getOrSet(
 -- Auth Service
 CREATE INDEX idx_users_email ON users(email);
 
--- Product Service
-CREATE INDEX idx_products_category ON products(category);
-CREATE INDEX idx_products_price ON products(price);
+-- Material Service
+CREATE INDEX idx_materials_discipline ON materials(discipline);
+CREATE INDEX idx_materials_level ON materials(level);
 
--- Order Service
-CREATE INDEX idx_orders_user_id ON orders(user_id);
-CREATE INDEX idx_orders_status ON orders(status);
+-- Share Service
+CREATE INDEX idx_shares_user_id ON shares(user_id);
+CREATE INDEX idx_shares_status ON shares(status);
 ```
 
 **Impacto:**
 - Busca por email: 95% mais rápida
-- Filtros de produtos: 80% mais rápido
-- Listagem de pedidos: 70% mais rápida
+- Filtros de materiais: 80% mais rápido
+- Listagem de compartilhamentos: 70% mais rápida
 
 ---
 
@@ -329,13 +329,13 @@ node tests/performance.test.js
 ### 2.4 Problema N+1 Queries
 
 **Análise:**
-- ✅ Order Service faz chamadas individuais ao Product Service
-- ⚠️ Potencial problema N+1 ao validar múltiplos produtos
+- ✅ Share Service faz chamadas individuais ao Material Service
+- ⚠️ Potencial problema N+1 ao validar múltiplos materiais
 
 **Mitigação:**
 ```javascript
-// Implementar batch endpoint no Product Service
-POST /api/products/batch
+// Implementar batch endpoint no Material Service
+POST /api/materials/batch
 {
   "ids": [1, 2, 3, 4, 5]
 }
@@ -474,7 +474,7 @@ const authController = new AuthController(registerUseCase, ...);
 | Biblioteca de Materiais | ✅ | Frontend + Share |
 | Compartilhamento | ✅ | Share Service |
 | Histórico de Compartilhamentos | ✅ | Share Service |
-| Filtros de Produtos | ✅ | Product Service |
+| Filtros de Materiais | ✅ | Material Service |
 | Autenticação | ✅ | Middleware |
 | Autorização RBAC | ✅ | Role checking |
 
@@ -514,8 +514,8 @@ coverageThreshold: {
 
 **Status:** 
 - Auth Service: ✅ >70%
-- Product Service: 📝 Adicionar testes
-- Order Service: 📝 Adicionar testes
+- Material Service: 📝 Adicionar testes
+- Share Service: 📝 Adicionar testes
 
 ---
 
@@ -599,9 +599,9 @@ coverageThreshold: {
 
 3. **Adicionar Batch Endpoint**
    ```javascript
-   // Product Service
-   POST /api/products/batch
-   // Para evitar N+1 no Order Service
+   // Material Service
+   POST /api/materials/batch
+   // Para evitar N+1 no Share Service
    ```
 
 ---
@@ -679,7 +679,7 @@ coverageThreshold: {
 
 📝 **Cobertura de Testes**
 - Auth Service: >70% ✅
-- Product/Order Services: necessitam mais testes
+- Material/Share Services: necessitam mais testes
 
 ---
 

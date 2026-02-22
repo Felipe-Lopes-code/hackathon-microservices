@@ -109,10 +109,10 @@ curl http://localhost:3000/health
 # Auth Service
 curl http://localhost:3001/api/auth/health
 
-# Product Service
+# Material Service
 curl http://localhost:3002/api/products/health
 
-# Order Service
+# Share Service
 curl http://localhost:3003/api/orders/health
 ```
 
@@ -173,45 +173,45 @@ curl -X POST http://localhost:3000/api/auth/login `
 
 ---
 
-#### 4.4 Criar Produto (requer autenticação)
+#### 4.4 Criar Material (requer autenticação)
 
 ```powershell
 # Substitua SEU_TOKEN pelo token recebido no login
 $token = "SEU_TOKEN_AQUI"
 
-curl -X POST http://localhost:3000/api/products `
+curl -X POST http://localhost:3000/api/materials `
   -H "Content-Type: application/json" `
   -H "Authorization: Bearer $token" `
   -d '{
-    "name": "Notebook Dell",
-    "description": "Notebook i7 16GB RAM",
-    "price": 3500.00,
-    "stock": 10,
-    "category": "electronics"
+    "name": "Lista de Exercícios - Geometria",
+    "description": "Exercícios de geometria espacial",
+    "price": 0,
+    "stock": 999,
+    "category": "Matemática"
   }'
 ```
 
 ---
 
-#### 4.5 Listar Produtos
+#### 4.5 Listar Materiais
 
 ```powershell
-# Listar todos os produtos (não requer autenticação)
-curl http://localhost:3000/api/products
+# Listar todos os materiais (não requer autenticação)
+curl http://localhost:3000/api/materials
 
-# Filtrar por categoria
-curl "http://localhost:3000/api/products?category=electronics"
+# Filtrar por disciplina
+curl "http://localhost:3000/api/materials?category=Matemática"
 
-# Filtrar por faixa de preço
-curl "http://localhost:3000/api/products?minPrice=1000&maxPrice=5000"
+# Buscar por nome
+curl "http://localhost:3000/api/materials?search=geometria"
 ```
 
 ---
 
-#### 4.6 Criar Pedido
+#### 4.6 Criar Compartilhamento
 
 ```powershell
-curl -X POST http://localhost:3000/api/orders `
+curl -X POST http://localhost:3000/api/shares `
   -H "Content-Type: application/json" `
   -H "Authorization: Bearer $token" `
   -d '{
@@ -226,10 +226,10 @@ curl -X POST http://localhost:3000/api/orders `
 
 ---
 
-#### 4.7 Listar Pedidos do Usuário
+#### 4.7 Listar Compartilhamentos do Usuário
 
 ```powershell
-curl http://localhost:3000/api/orders `
+curl http://localhost:3000/api/shares `
   -H "Authorization: Bearer $token"
 ```
 
@@ -319,12 +319,12 @@ docker exec -it hackathon-postgres psql -U postgres
 # Ver usuários cadastrados
 SELECT id, name, email, role, created_at FROM users;
 
-# Ver produtos
-\c product_db
+# Ver materiais
+\c material_db
 SELECT * FROM products;
 
-# Ver pedidos
-\c order_db
+# Ver compartilhamentos
+\c share_db
 SELECT * FROM orders;
 
 # Sair
@@ -626,8 +626,8 @@ Após verificar o funcionamento:
 
 1. **Explorar a Aplicação**
    - Criar vários usuários
-   - Cadastrar produtos
-   - Fazer pedidos
+   - Cadastrar materiais didáticos
+   - Fazer compartilhamentos
    - Testar filtros
 
 2. **Revisar Código**

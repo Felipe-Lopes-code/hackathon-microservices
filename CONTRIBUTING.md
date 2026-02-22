@@ -70,8 +70,8 @@ test: Adicionar testes
 chore: Tarefas de manutenção
 
 # Exemplos
-git commit -m "feat: adiciona validação de CPF"
-git commit -m "fix: corrige cálculo de frete"
+git commit -m "feat: adiciona validação de email"
+git commit -m "fix: corrige filtro de disciplinas"
 git commit -m "docs: atualiza README com instruções"
 ```
 

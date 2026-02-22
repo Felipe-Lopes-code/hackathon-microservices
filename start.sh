@@ -22,12 +22,12 @@ fi
 
 if [ ! -f "services/product-service/.env" ]; then
     cp services/product-service/.env.example services/product-service/.env
-    echo "✅ Product service .env criado"
+    echo "✅ Material service .env criado"
 fi
 
 if [ ! -f "services/order-service/.env" ]; then
     cp services/order-service/.env.example services/order-service/.env
-    echo "✅ Order service .env criado"
+    echo "✅ Share service .env criado"
 fi
 
 if [ ! -f "api-gateway/.env" ]; then
@@ -67,8 +67,8 @@ check_service() {
 
 check_service "API Gateway" "http://localhost:3000/health"
 check_service "Auth Service" "http://localhost:3001/api/auth/health"
-check_service "Product Service" "http://localhost:3002/api/products/health/check"
-check_service "Order Service" "http://localhost:3003/health"
+check_service "Material Service" "http://localhost:3002/api/products/health/check"
+check_service "Share Service" "http://localhost:3003/health"
 
 echo ""
 echo "🎉 Aplicação iniciada com sucesso!"
@@ -77,8 +77,8 @@ echo "📍 URLs disponíveis:"
 echo "   Web Client:    http://localhost"
 echo "   API Gateway:   http://localhost:3000"
 echo "   Auth Service:  http://localhost:3001"
-echo "   Product Service: http://localhost:3002"
-echo "   Order Service: http://localhost:3003"
+echo "   Material Service: http://localhost:3002"
+echo "   Share Service:    http://localhost:3003"
 echo ""
 echo "📊 Para ver logs: docker-compose -f docker-compose-prod.yml logs -f"
 echo "🛑 Para parar: docker-compose -f docker-compose-prod.yml down"

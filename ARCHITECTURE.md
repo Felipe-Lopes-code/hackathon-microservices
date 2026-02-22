@@ -44,11 +44,11 @@
                 ▼                    ▼                    ▼
     ┌──────────────────┐ ┌──────────────────┐ ┌──────────────────┐
     │                  │ │                  │ │                  │
-    │  Auth Service    │ │ Product Service  │ │  Order Service   │
+    │  Auth Service    │ │ Material Service │ │  Share Service   │
     │                  │ │                  │ │                  │
     │  - Register      │ │  - CRUD          │ │  - Create        │
     │  - Login         │ │  - Search        │ │  - List          │
-    │  - JWT Token     │ │  - Stock Mgmt    │ │  - Update Status │
+    │  - JWT Token     │ │  - Categorias    │ │  - Compartilhar  │
     │                  │ │                  │ │                  │
     └────────┬─────────┘ └────────┬─────────┘ └────────┬─────────┘
              │                    │                    │
@@ -63,9 +63,9 @@
                       │  ┌─────────────────┐ │
                       │  │   auth_db       │ │
                       │  ├─────────────────┤ │
-                      │  │  product_db     │ │
+                      │  │  material_db    │ │
                       │  ├─────────────────┤ │
-                      │  │  order_db       │ │
+                      │  │  share_db       │ │
                       │  └─────────────────┘ │
                       │                       │
                       └───────────────────────┘
@@ -105,11 +105,11 @@
                                          └──────────┘
 ```
 
-### 2. Criação de Pedido
+### 2. Compartilhamento de Material
 
 ```
 ┌──────────┐                          ┌─────────────┐
-│          │  1. POST /orders         │             │
+│          │  1. POST /shares         │             │
 │  Client  │ ───────────────────────> │   Gateway   │
 │          │  (JWT Token)             │             │
 └──────────┘                          └──────┬──────┘
@@ -124,14 +124,14 @@
                                               │ 3. Valid
                                               │
                                          ┌────▼─────┐
-                                         │  Order   │
+                                         │  Share   │
                                          │ Service  │
                                          └────┬─────┘
                                               │
-                                              │ 4. Check Stock
+                                              │ 4. Buscar Material
                                               │
                                          ┌────▼────────┐
-                                         │  Product    │
+                                         │  Material   │
                                          │  Service    │
                                          └─────────────┘
 ```
@@ -232,8 +232,8 @@ Docker Compose
     ├─ postgres
     ├─ redis
     ├─ auth-service
-    ├─ product-service
-    ├─ order-service
+    ├─ material-service (product-service)
+    ├─ share-service (order-service)
     ├─ api-gateway
     └─ web-client
 ```
@@ -244,8 +244,8 @@ Docker Compose
 AWS ECS Cluster
     │
     ├─ Task Definition 1 (Auth)
-    ├─ Task Definition 2 (Product)
-    ├─ Task Definition 3 (Order)
+    ├─ Task Definition 2 (Material)
+    ├─ Task Definition 3 (Share)
     ├─ Task Definition 4 (Gateway)
     └─ Task Definition 5 (Web)
          │
@@ -309,10 +309,10 @@ Check Redis Cache
 ```sql
 -- Índices aplicados
 CREATE INDEX idx_users_email ON users(email);
-CREATE INDEX idx_products_category ON products(category);
-CREATE INDEX idx_products_price ON products(price);
-CREATE INDEX idx_orders_user_id ON orders(user_id);
-CREATE INDEX idx_orders_status ON orders(status);
+CREATE INDEX idx_materials_discipline ON materials(discipline);
+CREATE INDEX idx_materials_level ON materials(level);
+CREATE INDEX idx_shares_user_id ON shares(user_id);
+CREATE INDEX idx_shares_status ON shares(status);
 ```
 
 ## Tecnologias por Camada

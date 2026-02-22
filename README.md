@@ -141,8 +141,8 @@ start.bat   # Windows
 # 1. Configure as variáveis de ambiente
 cp api-gateway/.env.example api-gateway/.env
 cp services/auth-service/.env.example services/auth-service/.env
-cp services/material-service/.env.example services/material-service/.env
-cp services/share-service/.env.example services/share-service/.env
+cp services/product-service/.env.example services/product-service/.env   # Material Service
+cp services/order-service/.env.example services/order-service/.env       # Share Service
 
 # 2. Instale as dependências
 npm install
@@ -156,8 +156,8 @@ npm run migrate
 # 5. Inicie os serviços (em terminais separados)
 cd api-gateway && npm run dev
 cd services/auth-service && npm run dev
-cd services/material-service && npm run dev
-cd services/share-service && npm run dev
+cd services/product-service && npm run dev   # Material Service
+cd services/order-service && npm run dev     # Share Service
 cd web-client && npm run dev
 ```
 
