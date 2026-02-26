@@ -5,10 +5,13 @@ yarn-error.log
 package-lock.json
 yarn.lock
 
-# Environment variables
+# Environment variables - CRITICAL: never commit secrets
 .env
 .env.local
 .env.*.local
+.env.production
+.env.staging
+!.env.example
 
 # IDE
 .vscode/
@@ -43,6 +46,27 @@ mobile-client/.expo-shared/
 mobile-client/android/
 mobile-client/ios/
 
-# Misc
+# Terraform
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+.terraform/
+.terraform.lock.hcl
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Secrets & Certificates
 *.pem
+*.key
+*.crt
+*.p12
+*.pfx
+*.jks
+*.keystore
+
+# Misc
 .vercel

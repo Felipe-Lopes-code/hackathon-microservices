@@ -139,17 +139,18 @@ psql -h localhost -p 5432 -U postgres -d auth_db
 -- No psql
 \c auth_db
 
--- Inserir usuário de teste
+-- Inserir usuário de teste (gere o hash bcrypt da senha desejada)
+-- Exemplo: echo -n 'sua_senha' | npx bcrypt-cli
 INSERT INTO users (email, password, name, role)
 VALUES (
   'admin@test.com',
-  '$2a$10$XqjXNPgFNYgXqLcWqWzwJOYPvW0vVgY8LvMZYoJnXqg1234567890', -- password123
+  '<HASH_BCRYPT_DA_SUA_SENHA>',
   'Admin User',
   'admin'
 );
 
 -- Verificar
-SELECT * FROM users;
+SELECT id, email, name, role FROM users;
 ```
 
 ## Debugging

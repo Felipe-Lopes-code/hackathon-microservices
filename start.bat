@@ -15,6 +15,18 @@ echo Docker está rodando
 REM Criar arquivos .env se não existirem
 echo Criando arquivos de configuração...
 
+if not exist ".env" (
+    copy ".env.example" ".env"
+    echo.
+    echo =====================================================
+    echo  ATENCAO: Arquivo .env criado a partir do template.
+    echo  EDITE o arquivo .env na raiz do projeto e altere
+    echo  POSTGRES_PASSWORD e JWT_SECRET antes de continuar!
+    echo =====================================================
+    echo.
+    pause
+)
+
 if not exist "services\auth-service\.env" (
     copy "services\auth-service\.env.example" "services\auth-service\.env"
     echo Auth service .env criado

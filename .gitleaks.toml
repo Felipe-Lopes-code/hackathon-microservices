@@ -1,0 +1,30 @@
+# Configuração do Gitleaks - Detector de segredos
+# https://github.com/gitleaks/gitleaks
+
+title = "Gitleaks Configuration"
+
+[extend]
+useDefault = true
+
+# Regras personalizadas para este projeto
+[[rules]]
+id = "postgres-password"
+description = "PostgreSQL password hardcoded"
+regex = '''(?i)(postgres_password|db_password)\s*[=:]\s*['\"]?[a-zA-Z0-9!@#$%^&*]{6,}['\"]?'''
+tags = ["database", "password"]
+
+[[rules]]
+id = "jwt-secret-hardcoded"
+description = "JWT secret hardcoded"
+regex = '''(?i)jwt_secret\s*[=:]\s*['\"]?[a-zA-Z0-9\-_]{10,}['\"]?'''
+tags = ["jwt", "secret"]
+
+# Arquivos a serem ignorados (exemplos e documentação podem ter placeholders)
+[allowlist]
+paths = [
+  '''.env\.example$''',
+  '''\.md$''',
+  '''tests/''',
+  '''coverage/''',
+  '''node_modules/''',
+]

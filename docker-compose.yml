@@ -6,8 +6,8 @@ services:
     image: postgres:15-alpine
     container_name: hackathon-postgres
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: CHANGE_ME_STRONG_PASSWORD
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
@@ -45,15 +45,15 @@ services:
       - "3001:3001"
     environment:
       - PORT=3001
-      - NODE_ENV=production
+      - NODE_ENV=${NODE_ENV:-development}
       - DB_HOST=postgres
       - DB_PORT=5432
       - DB_NAME=auth_db
-      - DB_USER=postgres
-      - DB_PASSWORD=CHANGE_ME_STRONG_PASSWORD
-      - JWT_SECRET=CHANGE_ME_USE_RANDOM_STRING_MIN_32_CHARS
-      - JWT_EXPIRES_IN=24h
-      - JWT_REFRESH_EXPIRES_IN=7d
+      - DB_USER=${POSTGRES_USER:-postgres}
+      - DB_PASSWORD=${POSTGRES_PASSWORD}
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_EXPIRES_IN=${JWT_EXPIRES_IN:-24h}
+      - JWT_REFRESH_EXPIRES_IN=${JWT_REFRESH_EXPIRES_IN:-7d}
     depends_on:
       postgres:
         condition: service_healthy
@@ -71,12 +71,12 @@ services:
       - "3002:3002"
     environment:
       - PORT=3002
-      - NODE_ENV=production
+      - NODE_ENV=${NODE_ENV:-development}
       - DB_HOST=postgres
       - DB_PORT=5432
       - DB_NAME=product_db
-      - DB_USER=postgres
-      - DB_PASSWORD=CHANGE_ME_STRONG_PASSWORD
+      - DB_USER=${POSTGRES_USER:-postgres}
+      - DB_PASSWORD=${POSTGRES_PASSWORD}
       - AUTH_SERVICE_URL=http://auth-service:3001
     depends_on:
       postgres:
@@ -97,12 +97,12 @@ services:
       - "3003:3003"
     environment:
       - PORT=3003
-      - NODE_ENV=production
+      - NODE_ENV=${NODE_ENV:-development}
       - DB_HOST=postgres
       - DB_PORT=5432
       - DB_NAME=order_db
-      - DB_USER=postgres
-      - DB_PASSWORD=CHANGE_ME_STRONG_PASSWORD
+      - DB_USER=${POSTGRES_USER:-postgres}
+      - DB_PASSWORD=${POSTGRES_PASSWORD}
       - AUTH_SERVICE_URL=http://auth-service:3001
       - PRODUCT_SERVICE_URL=http://product-service:3002
     depends_on:

@@ -15,6 +15,18 @@ echo "✅ Docker está rodando"
 # Criar arquivos .env se não existirem
 echo "📝 Criando arquivos de configuração..."
 
+if [ ! -f ".env" ]; then
+    cp .env.example .env
+    echo ""
+    echo "⚠️  ===================================================="
+    echo "⚠️  ATENÇÃO: Arquivo .env criado a partir do template."
+    echo "⚠️  EDITE o arquivo .env na raiz do projeto e altere"
+    echo "⚠️  POSTGRES_PASSWORD e JWT_SECRET antes de continuar!"
+    echo "⚠️  ===================================================="
+    echo ""
+    read -p "Pressione Enter após configurar o .env..."
+fi
+
 if [ ! -f "services/auth-service/.env" ]; then
     cp services/auth-service/.env.example services/auth-service/.env
     echo "✅ Auth service .env criado"
