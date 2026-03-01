@@ -5,6 +5,22 @@ on:
     branches: [main, develop]
   pull_request:
     branches: [main]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: false
+        default: 'production'
+  workflow_call:
+    secrets:
+      DOCKER_USERNAME:
+        required: true
+      DOCKER_PASSWORD:
+        required: true
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
 
 jobs:
   test-auth-service:
@@ -61,6 +77,8 @@ jobs:
     needs: [test-auth-service, test-product-service, test-order-service]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
+    env:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
     
     steps:
       - uses: actions/checkout@v3
@@ -70,44 +88,46 @@ jobs:
         
       - name: Login to Docker Hub
         uses: docker/login-action@v2
+        env:
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          username: ${{ env.DOCKER_USERNAME }}
+          password: ${{ env.DOCKER_PASSWORD }}
           
       - name: Build and push Auth Service
         uses: docker/build-push-action@v4
         with:
           context: ./services/auth-service
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/auth-service:latest
+          tags: ${{ env.DOCKER_USERNAME }}/auth-service:latest
           
       - name: Build and push Product Service
         uses: docker/build-push-action@v4
         with:
           context: ./services/product-service
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/product-service:latest
+          tags: ${{ env.DOCKER_USERNAME }}/product-service:latest
           
       - name: Build and push Order Service
         uses: docker/build-push-action@v4
         with:
           context: ./services/order-service
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/order-service:latest
+          tags: ${{ env.DOCKER_USERNAME }}/order-service:latest
           
       - name: Build and push API Gateway
         uses: docker/build-push-action@v4
         with:
           context: ./api-gateway
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/api-gateway:latest
+          tags: ${{ env.DOCKER_USERNAME }}/api-gateway:latest
           
       - name: Build and push Web Client
         uses: docker/build-push-action@v4
         with:
           context: ./web-client
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/web-client:latest
+          tags: ${{ env.DOCKER_USERNAME }}/web-client:latest
 
   deploy-to-aws:
     needs: build-and-push
@@ -119,9 +139,12 @@ jobs:
       
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
           
       - name: Deploy to ECS

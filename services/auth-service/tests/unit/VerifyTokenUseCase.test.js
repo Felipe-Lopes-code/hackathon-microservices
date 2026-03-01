@@ -46,7 +46,7 @@ describe('VerifyTokenUseCase', () => {
   it('should throw error for an invalid token', async () => {
     await expect(
       verifyTokenUseCase.execute('invalid-token')
-    ).rejects.toThrow('Invalid token');
+    ).rejects.toThrow('Token inválido');
 
     expect(mockRepository.findUserById).not.toHaveBeenCalled();
   });
@@ -63,7 +63,7 @@ describe('VerifyTokenUseCase', () => {
 
     await expect(
       verifyTokenUseCase.execute(expiredToken)
-    ).rejects.toThrow('Invalid token');
+    ).rejects.toThrow('Token inválido');
   });
 
   it('should throw error if user is not found in database', async () => {
@@ -77,7 +77,7 @@ describe('VerifyTokenUseCase', () => {
 
     await expect(
       verifyTokenUseCase.execute(validToken)
-    ).rejects.toThrow('Invalid token');
+    ).rejects.toThrow('Token inválido');
 
     expect(mockRepository.findUserById).toHaveBeenCalledWith(999);
   });
@@ -91,6 +91,6 @@ describe('VerifyTokenUseCase', () => {
 
     await expect(
       verifyTokenUseCase.execute(wrongSecretToken)
-    ).rejects.toThrow('Invalid token');
+    ).rejects.toThrow('Token inválido');
   });
 });

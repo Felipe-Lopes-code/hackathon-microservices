@@ -1,4 +1,4 @@
-// Domain Entity - User
+// Entidade de Domínio - Usuário (Professor/Aluno da plataforma EduShare)
 class User {
   constructor({ id, email, password, name, role, createdAt, updatedAt }) {
     this.id = id;
@@ -10,7 +10,7 @@ class User {
     this.updatedAt = updatedAt;
   }
 
-  // Business rules
+  // Regras de negócio
   isAdmin() {
     return this.role === 'admin';
   }

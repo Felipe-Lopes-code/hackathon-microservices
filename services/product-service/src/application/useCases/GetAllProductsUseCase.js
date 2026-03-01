@@ -1,4 +1,4 @@
-// Use Case - Get All Products
+// Caso de Uso - Listar Materiais Didáticos
 class GetAllProductsUseCase {
   constructor(productRepository) {
     this.productRepository = productRepository;

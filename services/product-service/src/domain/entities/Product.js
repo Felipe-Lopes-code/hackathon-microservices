@@ -1,29 +1,29 @@
-// Domain Entity - Material (Didactic Material for teachers)
+// Domain Entity - Material Didático (Recurso pedagógico para professores)
 class Material {
   constructor({ id, name, description, price, stock, category, imageUrl, createdAt, updatedAt }) {
     this.id = id;
-    this.name = name;              // Material title
-    this.description = description; // Material description
-    this.price = price;            // Always 0 (free materials)
-    this.stock = stock;            // Download count / availability
-    this.category = category;      // Discipline (Matemática, Português, etc.)
-    this.imageUrl = imageUrl;      // Material thumbnail
+    this.name = name;              // Título do material didático
+    this.description = description; // Descrição do conteúdo pedagógico
+    this.price = price;            // Sempre 0 (materiais gratuitos)
+    this.stock = stock;            // Quantidade disponível para compartilhamento
+    this.category = category;      // Disciplina (Matemática, Português, etc.)
+    this.imageUrl = imageUrl;      // Thumbnail / capa do material
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
 
-  // Business rules
+  // Regras de negócio
   isAvailable() {
     return this.stock > 0;
   }
 
-  canFulfillOrder(quantity) {
+  canFulfillShare(quantity) {
     return this.stock >= quantity;
   }
 
   decreaseStock(quantity) {
-    if (!this.canFulfillOrder(quantity)) {
-      throw new Error('Insufficient stock');
+    if (!this.canFulfillShare(quantity)) {
+      throw new Error('Material indisponível na quantidade solicitada');
     }
     this.stock -= quantity;
   }
@@ -34,7 +34,7 @@ class Material {
 
   updatePrice(newPrice) {
     if (newPrice < 0) {
-      throw new Error('Price cannot be negative');
+      throw new Error('Valor não pode ser negativo');
     }
     this.price = newPrice;
   }

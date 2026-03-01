@@ -1,23 +1,23 @@
-// Domain Entity - Share (Material Sharing between teachers and students)
+// Domain Entity - Compartilhamento (Distribuição de materiais entre professores e alunos)
 class Share {
   constructor({ id, userId, items, totalAmount, status, createdAt, updatedAt }) {
     this.id = id;
-    this.userId = userId;           // Teacher ID who initiates the share
-    this.items = items || [];       // Shared materials list
-    this.totalAmount = totalAmount; // Number of materials shared
-    this.status = status || 'pending'; // Share request status
+    this.userId = userId;           // ID do professor que solicita o compartilhamento
+    this.items = items || [];       // Lista de materiais compartilhados
+    this.totalAmount = totalAmount; // Quantidade total de materiais
+    this.status = status || 'pending'; // Status da solicitação de compartilhamento
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
 
-  // Share Status Flow: pending -> confirmed -> processing -> active -> completed
+  // Fluxo de Status: pending -> confirmed -> processing -> distributed -> completed
   static STATUSES = {
-    PENDING: 'pending',        // Share request submitted
-    CONFIRMED: 'confirmed',    // Share approved
-    PROCESSING: 'processing',  // Share being prepared
-    SHIPPED: 'shipped',        // Share distributed (active)
-    DELIVERED: 'delivered',    // Share completed
-    CANCELLED: 'cancelled',   // Share cancelled
+    PENDING: 'pending',        // Solicitação enviada
+    CONFIRMED: 'confirmed',    // Solicitação aprovada
+    PROCESSING: 'processing',  // Materiais sendo preparados
+    SHIPPED: 'shipped',        // Materiais distribuídos
+    DELIVERED: 'delivered',    // Compartilhamento concluído
+    CANCELLED: 'cancelled',   // Solicitação cancelada
   };
 
   canTransitionTo(newStatus) {
@@ -35,7 +35,7 @@ class Share {
 
   updateStatus(newStatus) {
     if (!this.canTransitionTo(newStatus)) {
-      throw new Error(`Cannot transition from ${this.status} to ${newStatus}`);
+      throw new Error(`Não é possível transicionar de ${this.status} para ${newStatus}`);
     }
     this.status = newStatus;
   }

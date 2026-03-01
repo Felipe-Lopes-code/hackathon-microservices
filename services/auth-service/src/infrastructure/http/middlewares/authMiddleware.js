@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-// Authentication Middleware
+// Middleware de Autenticação
 const authMiddleware = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
@@ -8,7 +8,7 @@ const authMiddleware = async (req, res, next) => {
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return res.status(401).json({
         success: false,
-        message: 'No token provided',
+        message: 'Token não fornecido',
       });
     }
 
@@ -21,18 +21,18 @@ const authMiddleware = async (req, res, next) => {
   } catch (error) {
     return res.status(401).json({
       success: false,
-      message: 'Invalid token',
+      message: 'Token inválido',
     });
   }
 };
 
-// Role-based Authorization Middleware
+// Middleware de Autorização por Perfil
 const authorizeRole = (...roles) => {
   return (req, res, next) => {
     if (!req.user || !roles.includes(req.user.role)) {
       return res.status(403).json({
         success: false,
-        message: 'Access denied',
+        message: 'Acesso negado',
       });
     }
     next();

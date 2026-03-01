@@ -15,43 +15,43 @@ const logger = require('./infrastructure/logger/logger');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Security Middlewares
+// Middlewares de Segurança
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
-// Rate Limiting
+// Limitação de Taxa de Requisições
 const limiter = rateLimit({
   windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000,
   max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 100,
-  message: 'Too many requests from this IP, please try again later.',
+  message: 'Muitas requisições deste IP, tente novamente mais tarde.',
 });
 app.use('/api/auth', limiter);
 
-// Dependency Injection
+// Injeção de Dependências
 const authRepository = new PostgresAuthRepository();
 const registerUseCase = new RegisterUserUseCase(authRepository);
 const loginUseCase = new LoginUserUseCase(authRepository);
 const verifyTokenUseCase = new VerifyTokenUseCase(authRepository);
 const authController = new AuthController(registerUseCase, loginUseCase, verifyTokenUseCase);
 
-// Routes
+// Rotas
 app.use('/api/auth', createAuthRoutes(authController));
 
-// Global Error Handler
+// Tratamento de Erros Global
 app.use((err, req, res, _next) => {
   logger.error(err.stack);
   res.status(500).json({
     success: false,
-    message: 'Internal server error',
+    message: 'Erro interno do servidor',
   });
 });
 
-// 404 Handler
+// Tratamento de Rota Não Encontrada
 app.use((req, res) => {
   res.status(404).json({
     success: false,
-    message: 'Route not found',
+    message: 'Rota não encontrada',
   });
 });
 

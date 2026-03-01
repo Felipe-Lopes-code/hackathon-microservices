@@ -1,19 +1,19 @@
 const axios = require('axios');
 
-// Use Case - Create Order
+// Caso de Uso - Criar Solicitação de Compartilhamento de Materiais
 class CreateOrderUseCase {
   constructor(orderRepository) {
     this.orderRepository = orderRepository;
   }
 
   async execute(userId, orderData) {
-    // Validate items with Product Service
+    // Validar materiais com o Serviço de Materiais
     const items = await this._validateAndFetchItems(orderData.items);
 
-    // Calculate total
+    // Calcular total de materiais
     const totalAmount = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-    // Create order
+    // Criar solicitação de compartilhamento
     const order = await this.orderRepository.createOrder({
       userId,
       items,
@@ -37,7 +37,7 @@ class CreateOrderUseCase {
           const product = response.data.data;
 
           if (!product.isAvailable || product.stock < item.quantity) {
-            throw new Error(`Product ${product.name} is not available in requested quantity`);
+            throw new Error(`Material ${product.name} não está disponível na quantidade solicitada`);
           }
 
           validatedItems.push({
@@ -48,7 +48,7 @@ class CreateOrderUseCase {
           });
         }
       } catch (error) {
-        throw new Error(`Failed to validate product ${item.productId}: ${error.message}`);
+        throw new Error(`Falha ao validar material ${item.productId}: ${error.message}`);
       }
     }
 

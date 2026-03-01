@@ -3,7 +3,7 @@ const autocannon = require('autocannon');
 
 /**
  * Performance and Load Testing Suite
- * Testes de carga e performance para os microserviços
+ * Testes de carga e performance para os microserviços da plataforma EduShare
  */
 describe('Performance Tests', () => {
   const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:3000';
@@ -28,7 +28,7 @@ describe('Performance Tests', () => {
       expect(duration).toBeLessThan(200);
     });
 
-    it('product listing should respond within 1000ms', async () => {
+    it('material listing should respond within 1000ms', async () => {
       const start = Date.now();
       const response = await axios.get(`${API_BASE_URL}/api/products`);
       const duration = Date.now() - start;
@@ -39,9 +39,9 @@ describe('Performance Tests', () => {
   });
 
   describe('Database Query Optimization', () => {
-    it('should use indexed queries for product search', async () => {
+    it('should use indexed queries for material search', async () => {
       const response = await axios.get(`${API_BASE_URL}/api/products`, {
-        params: { category: 'electronics' }
+        params: { category: 'Matemática' }
       });
 
       expect(response.status).toBe(200);
@@ -52,9 +52,9 @@ describe('Performance Tests', () => {
       const start = Date.now();
       const response = await axios.get(`${API_BASE_URL}/api/products`, {
         params: {
-          category: 'electronics',
-          minPrice: 100,
-          maxPrice: 1000,
+          category: 'Matemática',
+          minPrice: 0,
+          maxPrice: 100,
         }
       });
       const duration = Date.now() - start;
@@ -102,7 +102,7 @@ describe('Performance Tests', () => {
       });
     });
 
-    it('should handle concurrent product searches', async () => {
+    it('should handle concurrent material searches', async () => {
       const requests = Array(5).fill(null).map(() =>
         axios.get(`${API_BASE_URL}/api/products`)
       );
@@ -141,8 +141,8 @@ async function runLoadTests() {
   console.log(`Latency avg: ${healthResult.latency.mean}ms`);
   console.log(`Throughput: ${healthResult.throughput.average} bytes/sec\n`);
 
-  // Test 2: Product Listing
-  console.log('Test 2: Product Listing');
+  // Test 2: Material Listing
+  console.log('Test 2: Material Listing');
   const productsResult = await autocannon({
     url: 'http://localhost:3000/api/products',
     connections: 50,
@@ -177,7 +177,7 @@ async function runLoadTests() {
   // Performance Benchmarks
   console.log('📊 Performance Benchmarks:');
   console.log(`✅ Health Check: ${healthResult.requests.average >= 1000 ? 'PASS' : 'FAIL'} (Target: >1000 req/sec)`);
-  console.log(`✅ Product API: ${productsResult.requests.average >= 500 ? 'PASS' : 'FAIL'} (Target: >500 req/sec)`);
+  console.log(`✅ Material API: ${productsResult.requests.average >= 500 ? 'PASS' : 'FAIL'} (Target: >500 req/sec)`);
   console.log(`✅ Auth API: ${authResult.requests.average >= 100 ? 'PASS' : 'FAIL'} (Target: >100 req/sec)`);
   console.log(`✅ Latency: ${healthResult.latency.mean < 100 ? 'PASS' : 'FAIL'} (Target: <100ms)\n`);
 
@@ -192,7 +192,7 @@ async function runLoadTests() {
         throughput: healthResult.throughput.average,
       },
       {
-        name: 'Product Listing',
+        name: 'Material Listing',
         requestsPerSec: productsResult.requests.average,
         latencyMs: productsResult.latency.mean,
         throughput: productsResult.throughput.average,

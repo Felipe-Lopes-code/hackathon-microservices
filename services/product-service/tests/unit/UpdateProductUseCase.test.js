@@ -33,7 +33,7 @@ describe('UpdateProductUseCase', () => {
 
     await expect(
       updateProductUseCase.execute(999, { name: 'New Name' })
-    ).rejects.toThrow('Product not found');
+    ).rejects.toThrow('Material não encontrado');
 
     expect(mockRepository.updateProduct).not.toHaveBeenCalled();
   });
@@ -43,7 +43,7 @@ describe('UpdateProductUseCase', () => {
 
     await expect(
       updateProductUseCase.execute(1, { price: -5 })
-    ).rejects.toThrow('Price cannot be negative');
+    ).rejects.toThrow('Valor não pode ser negativo');
 
     expect(mockRepository.updateProduct).not.toHaveBeenCalled();
   });
@@ -53,7 +53,7 @@ describe('UpdateProductUseCase', () => {
 
     await expect(
       updateProductUseCase.execute(1, { stock: -3 })
-    ).rejects.toThrow('Stock cannot be negative');
+    ).rejects.toThrow('Quantidade disponível não pode ser negativa');
 
     expect(mockRepository.updateProduct).not.toHaveBeenCalled();
   });

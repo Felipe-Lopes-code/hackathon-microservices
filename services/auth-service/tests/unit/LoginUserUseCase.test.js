@@ -55,7 +55,7 @@ describe('LoginUserUseCase', () => {
         email: 'nonexistent@example.com',
         password: 'password123',
       })
-    ).rejects.toThrow('Invalid credentials');
+    ).rejects.toThrow('Credenciais inválidas');
   });
 
   it('should throw error if password is incorrect', async () => {
@@ -74,7 +74,7 @@ describe('LoginUserUseCase', () => {
         email: 'test@example.com',
         password: 'wrongpassword',
       })
-    ).rejects.toThrow('Invalid credentials');
+    ).rejects.toThrow('Credenciais inválidas');
   });
 
   it('should generate valid JWT tokens on successful login', async () => {

@@ -13,11 +13,11 @@ describe('CreateProductUseCase', () => {
 
   it('should create a product successfully', async () => {
     const productData = {
-      name: 'Test Product',
-      description: 'Test description',
+      name: 'Apostila de Geometria',
+      description: 'Material sobre geometria plana',
       price: 29.99,
       stock: 50,
-      category: 'electronics',
+      category: 'Matemática',
     };
 
     const expectedProduct = { id: 1, ...productData };
@@ -31,33 +31,33 @@ describe('CreateProductUseCase', () => {
 
   it('should throw error for negative price', async () => {
     const productData = {
-      name: 'Test Product',
+      name: 'Apostila de Geometria',
       price: -10,
       stock: 5,
     };
 
     await expect(createProductUseCase.execute(productData)).rejects.toThrow(
-      'Price cannot be negative'
+      'Valor não pode ser negativo'
     );
     expect(mockRepository.createProduct).not.toHaveBeenCalled();
   });
 
   it('should throw error for negative stock', async () => {
     const productData = {
-      name: 'Test Product',
+      name: 'Apostila de Geometria',
       price: 10,
       stock: -5,
     };
 
     await expect(createProductUseCase.execute(productData)).rejects.toThrow(
-      'Stock cannot be negative'
+      'Quantidade disponível não pode ser negativa'
     );
     expect(mockRepository.createProduct).not.toHaveBeenCalled();
   });
 
   it('should allow zero price', async () => {
     const productData = {
-      name: 'Free Product',
+      name: 'Material Gratuito',
       price: 0,
       stock: 10,
     };
@@ -71,7 +71,7 @@ describe('CreateProductUseCase', () => {
 
   it('should allow zero stock', async () => {
     const productData = {
-      name: 'Out of Stock Product',
+      name: 'Material Esgotado',
       price: 10,
       stock: 0,
     };

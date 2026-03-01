@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-// Authentication Middleware for Product Service
+// Middleware de Autenticação para o Serviço de Materiais Didáticos
 const authMiddleware = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
@@ -8,13 +8,13 @@ const authMiddleware = async (req, res, next) => {
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return res.status(401).json({
         success: false,
-        message: 'No token provided',
+        message: 'Token não fornecido',
       });
     }
 
     const token = authHeader.substring(7);
 
-    // Verify token with Auth Service
+    // Verificar token com o Serviço de Autenticação
     const response = await axios.post(
       `${process.env.AUTH_SERVICE_URL}/api/auth/verify`,
       { token },
@@ -27,13 +27,13 @@ const authMiddleware = async (req, res, next) => {
     } else {
       return res.status(401).json({
         success: false,
-        message: 'Invalid token',
+        message: 'Token inválido',
       });
     }
   } catch (error) {
     return res.status(401).json({
       success: false,
-      message: 'Authentication failed',
+      message: 'Falha na autenticação',
     });
   }
 };

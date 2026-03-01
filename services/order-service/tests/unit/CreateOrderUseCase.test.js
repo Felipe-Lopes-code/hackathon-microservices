@@ -31,13 +31,13 @@ describe('CreateOrderUseCase', () => {
       .mockResolvedValueOnce({
         data: {
           success: true,
-          data: { id: 1, name: 'Product A', price: 10, isAvailable: true, stock: 50 },
+          data: { id: 1, name: 'Apostila de Matemática', price: 10, isAvailable: true, stock: 50 },
         },
       })
       .mockResolvedValueOnce({
         data: {
           success: true,
-          data: { id: 2, name: 'Product B', price: 25, isAvailable: true, stock: 30 },
+          data: { id: 2, name: 'Guia de Gramática', price: 25, isAvailable: true, stock: 30 },
         },
       });
 
@@ -45,8 +45,8 @@ describe('CreateOrderUseCase', () => {
       id: 1,
       userId: 42,
       items: [
-        { productId: 1, name: 'Product A', price: 10, quantity: 2 },
-        { productId: 2, name: 'Product B', price: 25, quantity: 1 },
+        { productId: 1, name: 'Apostila de Matemática', price: 10, quantity: 2 },
+        { productId: 2, name: 'Guia de Gramática', price: 25, quantity: 1 },
       ],
       totalAmount: 45,
       status: 'pending',
@@ -76,13 +76,13 @@ describe('CreateOrderUseCase', () => {
     axios.get.mockResolvedValue({
       data: {
         success: true,
-        data: { id: 1, name: 'Product A', price: 10, isAvailable: false, stock: 5 },
+        data: { id: 1, name: 'Apostila de Matemática', price: 10, isAvailable: false, stock: 5 },
       },
     });
 
     await expect(
       createOrderUseCase.execute(42, orderData)
-    ).rejects.toThrow('not available');
+    ).rejects.toThrow('não está disponível');
   });
 
   it('should throw error when product service fails', async () => {
@@ -94,7 +94,7 @@ describe('CreateOrderUseCase', () => {
 
     await expect(
       createOrderUseCase.execute(42, orderData)
-    ).rejects.toThrow('Failed to validate product');
+    ).rejects.toThrow('Falha ao validar material');
   });
 
   it('should calculate total amount correctly', async () => {
@@ -107,7 +107,7 @@ describe('CreateOrderUseCase', () => {
     axios.get.mockResolvedValue({
       data: {
         success: true,
-        data: { id: 1, name: 'Product', price: 15.50, isAvailable: true, stock: 100 },
+        data: { id: 1, name: 'Apostila de História', price: 15.50, isAvailable: true, stock: 100 },
       },
     });
 

@@ -2,7 +2,7 @@ const { Pool } = require('pg');
 const Product = require('../../domain/entities/Product');
 const IProductRepository = require('../../domain/repositories/IProductRepository');
 
-// Infrastructure - PostgreSQL Repository Implementation
+// Infraestrutura - Implementação do Repositório PostgreSQL para Materiais Didáticos
 class PostgresProductRepository extends IProductRepository {
   constructor() {
     super();

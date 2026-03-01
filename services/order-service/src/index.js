@@ -27,12 +27,12 @@ app.get('/health', (req, res) => {
   res.status(200).json({ status: 'ok', service: 'share-service' });
 });
 
-// Error Handler
+// Tratamento de Erros
 app.use((err, req, res, _next) => {
   console.error(err.stack);
   res.status(500).json({
     success: false,
-    message: 'Internal server error',
+    message: 'Erro interno do servidor',
   });
 });
 

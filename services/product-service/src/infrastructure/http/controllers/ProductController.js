@@ -1,4 +1,4 @@
-// Material Controller - Manages didactic materials for teachers
+// Controller de Materiais Didáticos - Gerencia recursos pedagógicos para professores
 class ProductController {
   constructor(createUseCase, getAllUseCase, updateUseCase, productRepository) {
     this.createUseCase = createUseCase;
@@ -106,7 +106,7 @@ class ProductController {
 
       res.status(200).json({
         success: true,
-        message: 'Material deleted successfully',
+          message: 'Material removido com sucesso',
       });
     } catch (error) {
       res.status(500).json({

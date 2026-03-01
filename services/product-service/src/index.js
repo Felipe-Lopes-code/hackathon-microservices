@@ -30,23 +30,23 @@ const productController = new ProductController(
   productRepository
 );
 
-// Routes
+// Rotas
 app.use('/api/products', createProductRoutes(productController));
 
-// Global Error Handler
+// Tratamento de Erros Global
 app.use((err, req, res, _next) => {
   console.error(err.stack);
   res.status(500).json({
     success: false,
-    message: 'Internal server error',
+    message: 'Erro interno do servidor',
   });
 });
 
-// 404 Handler
+// Tratamento de Rota Não Encontrada
 app.use((req, res) => {
   res.status(404).json({
     success: false,
-    message: 'Route not found',
+    message: 'Rota não encontrada',
   });
 });
 

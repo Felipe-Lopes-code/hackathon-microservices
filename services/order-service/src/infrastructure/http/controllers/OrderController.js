@@ -1,3 +1,4 @@
+// Controller de Compartilhamento - Gerencia solicitações de distribuição de materiais
 class OrderController {
   constructor(createOrderUseCase, orderRepository) {
     this.createOrderUseCase = createOrderUseCase;
@@ -43,11 +44,11 @@ class OrderController {
       if (!order) {
         return res.status(404).json({
           success: false,
-          message: 'Share not found',
+          message: 'Compartilhamento não encontrado',
         });
       }
 
-      // Check if user owns the share
+      // Verificar se o usuário é dono do compartilhamento
       if (order.userId !== req.user.id && req.user.role !== 'admin') {
         return res.status(403).json({
           success: false,
@@ -82,7 +83,7 @@ class OrderController {
       if (!order.canTransitionTo(status)) {
         return res.status(400).json({
           success: false,
-          message: `Cannot transition from ${order.status} to ${status}`,
+          message: `Não é possível transicionar de ${order.status} para ${status}`,
         });
       }
 

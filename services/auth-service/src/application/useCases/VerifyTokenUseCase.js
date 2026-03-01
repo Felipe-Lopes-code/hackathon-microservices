@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-// Use Case - Verify Token
+// Caso de Uso - Verificar Token de Acesso
 class VerifyTokenUseCase {
   constructor(authRepository) {
     this.authRepository = authRepository;
@@ -12,12 +12,12 @@ class VerifyTokenUseCase {
       const user = await this.authRepository.findUserById(decoded.id);
 
       if (!user) {
-        throw new Error('User not found');
+        throw new Error('Usuário não encontrado');
       }
 
       return user.toJSON();
     } catch (error) {
-      throw new Error('Invalid token');
+      throw new Error('Token inválido');
     }
   }
 }

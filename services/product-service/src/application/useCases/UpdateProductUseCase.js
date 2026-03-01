@@ -1,4 +1,4 @@
-// Use Case - Update Product
+// Caso de Uso - Atualizar Material Didático
 class UpdateProductUseCase {
   constructor(productRepository) {
     this.productRepository = productRepository;
@@ -8,16 +8,16 @@ class UpdateProductUseCase {
     const product = await this.productRepository.findProductById(id);
 
     if (!product) {
-      throw new Error('Product not found');
+      throw new Error('Material não encontrado');
     }
 
-    // Validate business rules
+    // Validar regras de negócio
     if (productData.price !== undefined && productData.price < 0) {
-      throw new Error('Price cannot be negative');
+      throw new Error('Valor não pode ser negativo');
     }
 
     if (productData.stock !== undefined && productData.stock < 0) {
-      throw new Error('Stock cannot be negative');
+      throw new Error('Quantidade disponível não pode ser negativa');
     }
 
     return await this.productRepository.updateProduct(id, productData);

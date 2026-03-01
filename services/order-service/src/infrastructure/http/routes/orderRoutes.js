@@ -4,7 +4,7 @@ const authMiddleware = require('../middlewares/authMiddleware');
 function createOrderRoutes(orderController) {
   const router = express.Router();
 
-  // All routes require authentication
+  // Todas as rotas requerem autenticação
   router.use(authMiddleware);
 
   router.post('/', (req, res) => orderController.createOrder(req, res));

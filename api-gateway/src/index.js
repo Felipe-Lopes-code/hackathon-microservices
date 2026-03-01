@@ -13,7 +13,7 @@ const logger = require('./utils/logger');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Swagger Configuration
+// Configuração do Swagger
 const swaggerDefinition = {
   openapi: '3.0.0',
   info: {
@@ -169,14 +169,14 @@ const swaggerOptions = {
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
-// Debug: Log swagger spec info
+// Debug: Log de informações do Swagger
 console.log('Swagger paths count:', Object.keys(swaggerSpec.paths || {}).length);
 console.log('Swagger tags count:', (swaggerSpec.tags || []).length);
 
-// Security Middlewares
+// Middlewares de Segurança
 app.use(helmet());
 
-// CORS Configuration
+// Configuração do CORS
 const corsOptions = {
   origin: process.env.CORS_ORIGIN || '*',
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
@@ -185,26 +185,26 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-// Request Logging
+// Log de Requisições
 app.use(morgan('combined'));
 
-// Body Parser
+// Parser de Corpo da Requisição
 app.use(express.json());
 
-// Rate Limiting
+// Limitação de Taxa de Requisições
 const limiter = rateLimit({
   windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000,
   max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 100,
   message: {
     success: false,
-    message: 'Too many requests from this IP, please try again later.',
+    message: 'Muitas requisições deste IP, tente novamente mais tarde.',
   },
   standardHeaders: true,
   legacyHeaders: false,
 });
 app.use(limiter);
 
-// Health Check
+// Verificação de Saúde
 app.get('/health', (req, res) => {
   res.status(200).json({
     success: true,
@@ -213,13 +213,13 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Swagger UI
+// Interface do Swagger
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
   customCss: '.swagger-ui .topbar { display: none }',
   customSiteTitle: 'EduShare API Documentation',
 }));
 
-// API Documentation
+// Documentação da API
 /**
  * @swagger
  * /:
@@ -271,29 +271,29 @@ app.get('/api', (req, res) => {
   });
 });
 
-// Service Proxies - Educational routes
+// Proxies dos Serviços - Rotas educacionais
 app.use('/api/auth', createServiceProxy('auth'));
 app.use('/api/materials', createServiceProxy('materials'));
 app.use('/api/shares', createServiceProxy('shares'));
 
-// Legacy routes (backward compatibility with tests)
+// Rotas legadas (compatibilidade retroativa com testes)
 app.use('/api/products', createServiceProxy('products'));
 app.use('/api/orders', createServiceProxy('orders'));
 
-// 404 Handler
+// Tratamento de Rota Não Encontrada
 app.use((req, res) => {
   res.status(404).json({
     success: false,
-    message: 'Route not found',
+    message: 'Rota não encontrada',
   });
 });
 
-// Global Error Handler
+// Tratamento de Erros Global
 app.use((err, req, res, _next) => {
   logger.error(err.stack);
   res.status(500).json({
     success: false,
-    message: 'Internal server error',
+    message: 'Erro interno do servidor',
   });
 });
 

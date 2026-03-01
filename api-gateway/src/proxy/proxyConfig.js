@@ -1,7 +1,7 @@
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const logger = require('../utils/logger');
 
-// Service Configuration
+// Configuração dos Serviços da Plataforma EduShare
 const services = {
   auth: {
     target: process.env.AUTH_SERVICE_URL,
@@ -15,7 +15,7 @@ const services = {
     target: process.env.ORDER_SERVICE_URL,
     pathRewrite: (path) => path.replace('/api/shares', '/api/orders'),
   },
-  // Legacy routes (backward compatibility)
+  // Rotas legadas (compatibilidade retroativa)
   products: {
     target: process.env.PRODUCT_SERVICE_URL,
     pathRewrite: (path) => path.replace('/api/products', '/api/products'),
@@ -26,7 +26,7 @@ const services = {
   },
 };
 
-// Create proxy for each service
+// Criar proxy para cada serviço
 function createServiceProxy(serviceName) {
   const config = services[serviceName];
 
@@ -44,7 +44,7 @@ function createServiceProxy(serviceName) {
       logger.error(`[${serviceName}] Proxy error: ${err.message}`);
       res.status(503).json({
         success: false,
-        message: 'Service temporarily unavailable',
+        message: 'Serviço temporariamente indisponível',
       });
     },
   });

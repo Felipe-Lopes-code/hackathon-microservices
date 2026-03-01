@@ -1,13 +1,13 @@
 const jwt = require('jsonwebtoken');
 
 /**
- * Token Generator Utility
+ * Utilitário de Geração de Tokens
  * Centraliza a geração de tokens JWT para evitar duplicação de código
  */
 class TokenGenerator {
   constructor() {
     if (!process.env.JWT_SECRET) {
-      throw new Error('JWT_SECRET is not defined');
+      throw new Error('JWT_SECRET não está definido');
     }
     
     this.secret = process.env.JWT_SECRET;
@@ -16,13 +16,13 @@ class TokenGenerator {
   }
 
   /**
-   * Generates an access token with user data
-   * @param {Object} user - User object
-   * @returns {String} JWT access token
+   * Gera um token de acesso com dados do usuário
+   * @param {Object} user - Objeto do usuário
+   * @returns {String} Token JWT de acesso
    */
   generateAccessToken(user) {
     if (!user || !user.id) {
-      throw new Error('Invalid user data for token generation');
+      throw new Error('Dados de usuário inválidos para geração de token');
     }
 
     return jwt.sign(
@@ -37,13 +37,13 @@ class TokenGenerator {
   }
 
   /**
-   * Generates a refresh token
-   * @param {Object} user - User object
-   * @returns {String} JWT refresh token
+   * Gera um token de atualização
+   * @param {Object} user - Objeto do usuário
+   * @returns {String} Token JWT de atualização
    */
   generateRefreshToken(user) {
     if (!user || !user.id) {
-      throw new Error('Invalid user data for token generation');
+      throw new Error('Dados de usuário inválidos para geração de token');
     }
 
     return jwt.sign(
@@ -54,22 +54,22 @@ class TokenGenerator {
   }
 
   /**
-   * Verifies a token and returns the payload
-   * @param {String} token - JWT token
-   * @returns {Object} Decoded token payload
+   * Verifica um token e retorna o payload
+   * @param {String} token - Token JWT
+   * @returns {Object} Payload do token decodificado
    */
   verifyToken(token) {
     try {
       return jwt.verify(token, this.secret);
     } catch (error) {
-      throw new Error('Invalid or expired token');
+      throw new Error('Token inválido ou expirado');
     }
   }
 
   /**
-   * Decodes a token without verification
-   * @param {String} token - JWT token
-   * @returns {Object|null} Decoded token or null
+   * Decodifica um token sem verificação
+   * @param {String} token - Token JWT
+   * @returns {Object|null} Token decodificado ou null
    */
   decodeToken(token) {
     return jwt.decode(token);

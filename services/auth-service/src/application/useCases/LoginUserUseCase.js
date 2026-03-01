@@ -1,26 +1,26 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-// Use Case - Login User
+// Caso de Uso - Login de Usuário na plataforma EduShare
 class LoginUserUseCase {
   constructor(authRepository) {
     this.authRepository = authRepository;
   }
 
   async execute({ email, password }) {
-    // Find user
+    // Buscar usuário
     const user = await this.authRepository.findUserByEmail(email);
     if (!user) {
-      throw new Error('Invalid credentials');
+      throw new Error('Credenciais inválidas');
     }
 
-    // Verify password
+    // Verificar senha
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      throw new Error('Invalid credentials');
+      throw new Error('Credenciais inválidas');
     }
 
-    // Generate tokens
+    // Gerar tokens de acesso
     const accessToken = this._generateAccessToken(user);
     const refreshToken = this._generateRefreshToken(user);
 

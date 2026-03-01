@@ -7,7 +7,7 @@ const authMiddleware = async (req, res, next) => {
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return res.status(401).json({
         success: false,
-        message: 'No token provided',
+        message: 'Token não fornecido',
       });
     }
 
@@ -25,13 +25,13 @@ const authMiddleware = async (req, res, next) => {
     } else {
       return res.status(401).json({
         success: false,
-        message: 'Invalid token',
+        message: 'Token inválido',
       });
     }
   } catch (error) {
     return res.status(401).json({
       success: false,
-      message: 'Authentication failed',
+      message: 'Falha na autenticação',
     });
   }
 };

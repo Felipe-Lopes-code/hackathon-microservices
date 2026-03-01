@@ -1,17 +1,17 @@
-// Use Case - Create Product
+// Caso de Uso - Criar Material Didático
 class CreateProductUseCase {
   constructor(productRepository) {
     this.productRepository = productRepository;
   }
 
   async execute(productData) {
-    // Validate business rules
+    // Validar regras de negócio
     if (productData.price < 0) {
-      throw new Error('Price cannot be negative');
+      throw new Error('Valor não pode ser negativo');
     }
 
     if (productData.stock < 0) {
-      throw new Error('Stock cannot be negative');
+      throw new Error('Quantidade disponível não pode ser negativa');
     }
 
     return await this.productRepository.createProduct(productData);

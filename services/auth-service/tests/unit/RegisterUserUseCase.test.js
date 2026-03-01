@@ -51,7 +51,7 @@ describe('RegisterUserUseCase', () => {
 
     mockRepository.findUserByEmail.mockResolvedValue(new User({ id: 1, ...userData }));
 
-    await expect(registerUseCase.execute(userData)).rejects.toThrow('User already exists');
+    await expect(registerUseCase.execute(userData)).rejects.toThrow('Usuário já cadastrado');
     expect(mockRepository.createUser).not.toHaveBeenCalled();
   });
 

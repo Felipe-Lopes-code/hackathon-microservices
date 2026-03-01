@@ -5,8 +5,8 @@ describe('Order Entity', () => {
     id: 1,
     userId: 42,
     items: [
-      { productId: 1, name: 'Product A', price: 10, quantity: 2 },
-      { productId: 2, name: 'Product B', price: 25, quantity: 1 },
+      { productId: 1, name: 'Apostila de Matemática', price: 10, quantity: 2 },
+      { productId: 2, name: 'Guia de Gramática', price: 25, quantity: 1 },
     ],
     totalAmount: 45,
     status: 'pending',
@@ -104,7 +104,7 @@ describe('Order Entity', () => {
     it('should throw error for invalid transition', () => {
       const order = new Order({ ...validOrderData, status: 'pending' });
       expect(() => order.updateStatus('delivered')).toThrow(
-        'Cannot transition from pending to delivered'
+        'Não é possível transicionar de pending para delivered'
       );
     });
 

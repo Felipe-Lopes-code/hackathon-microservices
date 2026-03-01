@@ -1,6 +1,6 @@
-// Domain Repository Interface
+// Interface do Repositório de Materiais Didáticos
 class IProductRepository {
-  async createProduct(product) {
+  async createProduct(material) {
     throw new Error('Method not implemented');
   }
 

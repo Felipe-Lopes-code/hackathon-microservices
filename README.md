@@ -230,39 +230,38 @@ cd tests && npm run load-test
 
 ## 🎯 Casos de Uso Reais
 
-### Caso 1: Professora de Matemática - Ensino Médio
-**Problema:** Precisa de exercícios de geometria para 1º ano, mas não tem tempo para criar
+### Caso 1: Professora cadastra e publica material didático
+**Problema:** Criou uma apostila de Matemática e quer disponibilizar para outros professores
 
 **Solução EduShare:**
-1. Busca "geometria + 1º ano + exercícios"
-2. Encontra 15 materiais de outros professores
-3. Baixa 3 PDFs mais adequados
-4. Adapta para sua turma
-5. Compartilha versão adaptada de volta
+1. Registra-se na plataforma via `POST /auth/register` (nome, e-mail, senha)
+2. Faz login e obtém token JWT via `POST /auth/login`
+3. Cadastra o material via `POST /products` informando: título, descrição, categoria "Matemática" e imagem de capa
+4. O material fica disponível no catálogo público para qualquer professor consultar
 
-**Impacto:** Economiza 4h de trabalho, melhora qualidade das atividades
+**Impacto:** O material criado por um professor fica acessível a toda a rede, reduzindo retrabalho
 
-### Caso 2: Professor de História - Ensino Fundamental
-**Problema:** Quer gamificar ensino da República Velha
-
-**Solução EduShare:**
-1. Encontra quiz interativo criado por colega
-2. Baixa material com perguntas e respostas
-3. Aplica com alunos
-4. Compartilha feedback e melhorias
-
-**Impacto:** Aumenta engajamento dos alunos, troca de experiências
-
-### Caso 3: Coordenadora Pedagógica
-**Problema:** Precisa organizar materiais para toda escola
+### Caso 2: Professor busca materiais por disciplina
+**Problema:** Precisa de materiais de História mas não quer criar tudo do zero
 
 **Solução EduShare:**
-1. Cria coleções por disciplina
-2. Convida professores para colaborar
-3. Centraliza recursos de qualidade
-4. Distribui para toda rede municipal
+1. Acessa o catálogo público via `GET /products?category=História`
+2. Visualiza a lista de materiais disponíveis com título, descrição e thumbnail
+3. Consulta detalhes de um material específico via `GET /products/:id`
+4. Identifica os mais relevantes para sua turma
 
-**Impacto:** Padronização da qualidade, economia para escola
+**Impacto:** Encontra rapidamente recursos já prontos, filtrando por disciplina
+
+### Caso 3: Professor solicita compartilhamento de materiais
+**Problema:** Selecionou materiais de colegas e quer registrar uma solicitação formal de compartilhamento
+
+**Solução EduShare:**
+1. Autentica-se na plataforma (JWT)
+2. Cria uma solicitação de compartilhamento via `POST /orders` com a lista de materiais desejados (itens e quantidades)
+3. Acompanha o status da solicitação via `GET /orders/my-orders` (pending → confirmed → processing → shipped → delivered)
+4. Recebe atualização quando o status muda via `PATCH /orders/:id/status`
+
+**Impacto:** Fluxo organizado de distribuição de materiais com rastreabilidade de cada etapa
 
 ## 🏆 Diferenciais da Solução
 
@@ -270,11 +269,11 @@ cd tests && npm run load-test
 |---------------|----------|--------------|
 | **Foco** | Professores públicos brasileiros | Geral/Internacional |
 | **Custo** | Gratuito e open-source | Assinaturas pagas |
-| **Colaboração** | Compartilhamento entre pares | Consumo passivo |
-| **Contexto** | Realidade brasileira | Descontextualizado |
-| **Tecnologia** | Moderna e escalável | Legada |
-| **LGPD** | Compliant desde o início | Adaptação posterior |
-| **Offline** | Suporte a download | Apenas online |
+| **Catálogo** | CRUD completo de materiais por categoria | Repositórios estáticos |
+| **Compartilhamento** | Fluxo de solicitação com status rastreável | Sem controle de distribuição |
+| **Tecnologia** | Microserviços, Docker, CI/CD | Monolitos legados |
+| **Segurança** | JWT, bcrypt, Helmet, rate limiting | Proteções básicas |
+| **Arquitetura** | Clean Architecture com separação de camadas | Código acoplado |
 
 ## 🚀 Roadmap Futuro
 

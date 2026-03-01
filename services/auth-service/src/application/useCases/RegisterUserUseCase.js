@@ -1,30 +1,30 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-// Use Case - Register User
+// Caso de Uso - Registrar Usuário na plataforma EduShare
 class RegisterUserUseCase {
   constructor(authRepository) {
     this.authRepository = authRepository;
   }
 
   async execute({ email, password, name }) {
-    // Check if user already exists
+    // Verificar se o usuário já existe
     const existingUser = await this.authRepository.findUserByEmail(email);
     if (existingUser) {
-      throw new Error('User already exists');
+      throw new Error('Usuário já cadastrado');
     }
 
-    // Hash password
+    // Criptografar senha
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create user
+    // Criar usuário
     const user = await this.authRepository.createUser({
       email,
       password: hashedPassword,
       name,
     });
 
-    // Generate tokens
+    // Gerar tokens de acesso
     const accessToken = this._generateAccessToken(user);
     const refreshToken = this._generateRefreshToken(user);
 

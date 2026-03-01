@@ -1,4 +1,4 @@
-// Auth Controller
+// Controller de Autenticação - Gerencia registro e login de usuários EduShare
 class AuthController {
   constructor(registerUseCase, loginUseCase, verifyTokenUseCase) {
     this.registerUseCase = registerUseCase;

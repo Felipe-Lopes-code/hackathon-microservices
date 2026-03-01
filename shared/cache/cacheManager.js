@@ -1,8 +1,9 @@
 const Redis = require('ioredis');
 
 /**
- * Cache Manager with Redis
+ * Cache Manager com Redis
  * Implementa estratégia de cache para otimização de performance
+ * Utilizado pelos serviços de materiais e compartilhamentos da plataforma EduShare
  */
 class CacheManager {
   constructor() {

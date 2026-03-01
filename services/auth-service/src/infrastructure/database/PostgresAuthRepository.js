@@ -2,7 +2,7 @@ const { Pool } = require('pg');
 const User = require('../../domain/entities/User');
 const IAuthRepository = require('../../domain/repositories/IAuthRepository');
 
-// Infrastructure - PostgreSQL Repository Implementation
+// Infraestrutura - Implementação do Repositório PostgreSQL para Autenticação
 class PostgresAuthRepository extends IAuthRepository {
   constructor() {
     super();

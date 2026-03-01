@@ -13,8 +13,8 @@ describe('GetAllProductsUseCase', () => {
 
   it('should return all products without filters', async () => {
     const products = [
-      { id: 1, name: 'Product 1', price: 10 },
-      { id: 2, name: 'Product 2', price: 20 },
+      { id: 1, name: 'Apostila de Frações', price: 10 },
+      { id: 2, name: 'Guia de Gramática', price: 20 },
     ];
 
     mockRepository.findAllProducts.mockResolvedValue(products);
@@ -28,7 +28,7 @@ describe('GetAllProductsUseCase', () => {
 
   it('should pass filters to repository', async () => {
     const filters = {
-      category: 'electronics',
+      category: 'Matemática',
       minPrice: 10,
       maxPrice: 100,
     };
@@ -50,7 +50,7 @@ describe('GetAllProductsUseCase', () => {
   });
 
   it('should handle filters with limit', async () => {
-    const products = [{ id: 1, name: 'Product 1' }];
+    const products = [{ id: 1, name: 'Apostila de Frações' }];
     mockRepository.findAllProducts.mockResolvedValue(products);
 
     const result = await getAllProductsUseCase.execute({ limit: 1 });
