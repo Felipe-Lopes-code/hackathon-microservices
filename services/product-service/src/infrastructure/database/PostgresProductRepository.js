@@ -77,6 +77,12 @@ class PostgresProductRepository extends IProductRepository {
     const values = [];
     let paramCount = 1;
 
+    if (filters.search) {
+      query += ` AND (name ILIKE $${paramCount} OR description ILIKE $${paramCount})`;
+      values.push(`%${filters.search}%`);
+      paramCount++;
+    }
+
     if (filters.category) {
       query += ` AND category = $${paramCount}`;
       values.push(filters.category);

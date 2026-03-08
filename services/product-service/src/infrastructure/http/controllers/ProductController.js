@@ -26,6 +26,7 @@ class ProductController {
   async getAllProducts(req, res) {
     try {
       const filters = {
+        search: req.query.search,
         category: req.query.category,
         minPrice: req.query.minPrice ? parseFloat(req.query.minPrice) : undefined,
         maxPrice: req.query.maxPrice ? parseFloat(req.query.maxPrice) : undefined,
