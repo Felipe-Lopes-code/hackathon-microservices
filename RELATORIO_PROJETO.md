@@ -1,40 +1,19 @@
-<![CDATA[<!-- 
-    Relatório do Projeto - EduShare
-    Formatado para MarkdownPad 2
-    Hackathon 5FSDT - Postech
-    Data: Março de 2026
--->
+<div align="center">
 
-<style>
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.8; color: #2c3e50; max-width: 900px; margin: 0 auto; padding: 40px; }
-    h1 { color: #1a5276; border-bottom: 3px solid #2980b9; padding-bottom: 12px; font-size: 2em; }
-    h2 { color: #2471a3; border-bottom: 2px solid #85c1e9; padding-bottom: 8px; margin-top: 40px; }
-    h3 { color: #2e86c1; margin-top: 25px; }
-    h4 { color: #3498db; }
-    table { border-collapse: collapse; width: 100%; margin: 15px 0; }
-    th { background-color: #2980b9; color: white; padding: 12px; text-align: left; }
-    td { border: 1px solid #d5dbdb; padding: 10px; }
-    tr:nth-child(even) { background-color: #eaf2f8; }
-    code { background-color: #f4f6f7; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
-    pre { background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 6px; padding: 16px; overflow-x: auto; }
-    blockquote { border-left: 4px solid #2980b9; margin: 20px 0; padding: 12px 20px; background-color: #eaf2f8; }
-    .badge { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 0.85em; font-weight: bold; margin: 2px; }
-    .badge-success { background-color: #27ae60; color: white; }
-    .badge-info { background-color: #2980b9; color: white; }
-    .badge-warning { background-color: #f39c12; color: white; }
-    hr { border: none; border-top: 2px solid #d5dbdb; margin: 30px 0; }
-</style>
+# 📘 RELATÓRIO DO PROJETO
+
+### EduShare — Plataforma Colaborativa de Materiais Didáticos para Professores do Ensino Público
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Security: Audited](https://img.shields.io/badge/Security-Audited-green.svg)](AUDIT_REPORT.md)
+[![Hackathon](https://img.shields.io/badge/Hackathon-5FSDT%20Postech-blue.svg)](#)
+
+</div>
 
 ---
 
-# RELATÓRIO DO PROJETO
-
-## EduShare — Plataforma Colaborativa de Materiais Didáticos para Professores do Ensino Público
-
----
-
-| | |
-|---|---|
+| Campo | Detalhe |
+|:---|:---|
 | **Evento** | Hackathon 5FSDT — Postech |
 | **Tema** | Auxílio aos Professores e Professoras no Ensino Público |
 | **Equipe** | Hackathon 5FSDT Team |
@@ -44,7 +23,7 @@
 
 ---
 
-# 1. Resumo Executivo
+# 📋 1. Resumo Executivo
 
 O **EduShare** é uma plataforma tecnológica open-source, construída sobre uma arquitetura de microserviços moderna e escalável, desenvolvida para enfrentar desafios estruturais vivenciados por professores da rede pública de ensino brasileira. A solução funciona como um **repositório colaborativo** — um "GitHub para educadores" — onde docentes podem criar, publicar, buscar, baixar, compartilhar e adaptar materiais didáticos de qualidade de forma **gratuita, segura e descentralizada**.
 
@@ -72,7 +51,7 @@ Democratizar o acesso a recursos pedagógicos de qualidade, reduzir o tempo de p
 
 ---
 
-# 2. Problema Identificado
+# 🔍 2. Problema Identificado
 
 ## 2.1 Contexto da Educação Pública Brasileira
 
@@ -136,7 +115,7 @@ Investir em ferramentas que auxiliem professores é **multiplicar impacto**:
 
 ---
 
-# 3. Descrição da Solução
+# 💡 3. Descrição da Solução
 
 ## 3.1 Visão Geral
 
@@ -231,7 +210,7 @@ O **EduShare** é uma plataforma web gratuita e open-source que funciona como um
 
 ---
 
-# 4. Processo de Desenvolvimento
+# 🚀 4. Processo de Desenvolvimento
 
 ## 4.1 Metodologia
 
@@ -312,7 +291,7 @@ A equipe adotou uma abordagem **Ágil e Iterativa** fundamentada em **Design Thi
 
 ---
 
-# 5. Detalhes Técnicos
+# ⚙️ 5. Detalhes Técnicos
 
 ## 5.1 Tecnologias Utilizadas
 
@@ -599,7 +578,7 @@ Todos os serviços são containerizados com **Docker** e orquestrados com **Dock
 
 ---
 
-# 6. Links Úteis
+# 🔗 6. Links Úteis
 
 ## Repositório de Código
 
@@ -693,7 +672,7 @@ hackathon-microservices/
 
 ---
 
-# 7. Aprendizados e Próximos Passos
+# 🌱 7. Aprendizados e Próximos Passos
 
 ## 7.1 O Que a Equipe Aprendeu
 
@@ -763,7 +742,7 @@ hackathon-microservices/
 
 ---
 
-# Conclusão
+# 🎯 Conclusão
 
 O **EduShare** representa muito mais do que uma solução tecnológica — é uma **ferramenta de transformação social**. Ao empoderar professores da rede pública com recursos de qualidade e uma comunidade colaborativa, estamos investindo diretamente no futuro de milhões de alunos brasileiros.
 
@@ -773,15 +752,18 @@ Com uma arquitetura robusta, segura e escalável, o projeto está preparado para
 
 ---
 
-| | |
-|---|---|
+| Campo | Detalhe |
+|:---|:---|
 | **Projeto** | EduShare — Plataforma Colaborativa de Materiais Didáticos |
 | **Equipe** | Hackathon 5FSDT Team — Postech |
 | **Versão do Documento** | 1.0 |
-| **Formato** | Markdown (compatível com MarkdownPad) |
+| **Formato** | Markdown (GitHub-Flavored Markdown) |
 | **Licença** | MIT (Open Source) |
 
 ---
 
+<div align="center">
+
 *Documento elaborado pela equipe Hackathon 5FSDT como parte do hackathon Postech — Tema: Auxílio aos Professores e Professoras no Ensino Público.*
-]]>
+
+</div>
