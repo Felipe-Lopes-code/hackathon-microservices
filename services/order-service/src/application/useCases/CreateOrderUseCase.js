@@ -36,18 +36,21 @@ class CreateOrderUseCase {
         if (response.data.success) {
           const product = response.data.data;
 
-          if (!product.isAvailable || product.stock < item.quantity) {
-            throw new Error(`Material ${product.name} não está disponível na quantidade solicitada`);
-          }
-
+          // Materiais educacionais são digitais e gratuitos — sempre disponíveis.
+          // Apenas validamos que o material existe no catálogo.
           validatedItems.push({
             productId: product.id,
             name: product.name,
-            price: product.price,
+            price: product.price || 0,
             quantity: item.quantity,
           });
+        } else {
+          throw new Error(`Material ${item.productId} não encontrado no catálogo`);
         }
       } catch (error) {
+        if (error.response && error.response.status === 404) {
+          throw new Error(`Material ${item.productId} não encontrado no catálogo`);
+        }
         throw new Error(`Falha ao validar material ${item.productId}: ${error.message}`);
       }
     }
