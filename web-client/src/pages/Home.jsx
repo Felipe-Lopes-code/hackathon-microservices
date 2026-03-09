@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { materialService } from '../services';
 import { ProductCard } from '../components/ProductCard';
 import './Home.css';
@@ -9,38 +9,61 @@ const DISCIPLINAS = [
   'Biologia', 'Física', 'Química', 'Filosofia', 'Sociologia',
 ];
 
+const SEARCH_DEBOUNCE_MS = 400;
+
 export const Home = () => {
   const [materials, setMaterials] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [searching, setSearching] = useState(false);
   const [error, setError] = useState(null);
-  const [filters, setFilters] = useState({
-    category: '',
-    search: '',
-  });
+  const [category, setCategory] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
+  const debounceTimer = useRef(null);
 
+  // Debounce: update debouncedSearch after user stops typing
+  useEffect(() => {
+    debounceTimer.current = setTimeout(() => {
+      setDebouncedSearch(searchTerm);
+    }, SEARCH_DEBOUNCE_MS);
+    return () => clearTimeout(debounceTimer.current);
+  }, [searchTerm]);
+
+  // Fetch materials when category or debounced search changes
   useEffect(() => {
     loadMaterials();
-  }, [filters]);
+  }, [category, debouncedSearch]);
 
   const loadMaterials = async () => {
     try {
-      setLoading(true);
-      const response = await materialService.getAll(filters);
+      if (initialLoading) {
+        setInitialLoading(true);
+      } else {
+        setSearching(true);
+      }
+      const response = await materialService.getAll({
+        category,
+        search: debouncedSearch,
+      });
       setMaterials(response.data);
     } catch (err) {
       setError('Erro ao carregar materiais didáticos');
       console.error(err);
     } finally {
-      setLoading(false);
+      setInitialLoading(false);
+      setSearching(false);
     }
   };
 
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
-    setFilters((prev) => ({ ...prev, [name]: value }));
+  const handleCategoryChange = (e) => {
+    setCategory(e.target.value);
   };
 
-  if (loading) return <div className="loading">Carregando materiais...</div>;
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  if (initialLoading) return <div className="loading">Carregando materiais...</div>;
   if (error) return <div className="error">{error}</div>;
 
   return (
@@ -57,8 +80,8 @@ export const Home = () => {
         <div className="filters">
           <select
             name="category"
-            value={filters.category}
-            onChange={handleFilterChange}
+            value={category}
+            onChange={handleCategoryChange}
             className="filter-input filter-select"
           >
             {DISCIPLINAS.map((d) => (
@@ -71,10 +94,12 @@ export const Home = () => {
             type="text"
             name="search"
             placeholder="🔍 Buscar material por nome..."
-            value={filters.search}
-            onChange={handleFilterChange}
+            value={searchTerm}
+            onChange={handleSearchChange}
             className="filter-input"
+            autoComplete="off"
           />
+          {searching && <span className="search-indicator">Buscando...</span>}
         </div>
 
         <div className="products-grid">
