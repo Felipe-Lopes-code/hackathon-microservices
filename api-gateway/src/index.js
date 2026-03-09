@@ -188,7 +188,16 @@ app.use(cors(corsOptions));
 // Log de Requisições
 app.use(morgan('combined'));
 
-// Parser de Corpo da Requisição
+// Proxies dos Serviços - ANTES do body parser para não consumir o body stream
+app.use('/api/auth', createServiceProxy('auth'));
+app.use('/api/materials', createServiceProxy('materials'));
+app.use('/api/shares', createServiceProxy('shares'));
+
+// Rotas legadas (compatibilidade retroativa com testes)
+app.use('/api/products', createServiceProxy('products'));
+app.use('/api/orders', createServiceProxy('orders'));
+
+// Parser de Corpo da Requisição (apenas para rotas locais do gateway)
 app.use(express.json());
 
 // Limitação de Taxa de Requisições
@@ -270,15 +279,6 @@ app.get('/api', (req, res) => {
     documentation: '/api/docs',
   });
 });
-
-// Proxies dos Serviços - Rotas educacionais
-app.use('/api/auth', createServiceProxy('auth'));
-app.use('/api/materials', createServiceProxy('materials'));
-app.use('/api/shares', createServiceProxy('shares'));
-
-// Rotas legadas (compatibilidade retroativa com testes)
-app.use('/api/products', createServiceProxy('products'));
-app.use('/api/orders', createServiceProxy('orders'));
 
 // Tratamento de Rota Não Encontrada
 app.use((req, res) => {
