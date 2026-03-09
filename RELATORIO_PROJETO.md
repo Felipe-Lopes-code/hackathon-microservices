@@ -5,7 +5,7 @@
 ### EduShare — Plataforma Colaborativa de Materiais Didáticos para Professores do Ensino Público
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Security: Audited](https://img.shields.io/badge/Security-Audited-green.svg)](AUDIT_REPORT.md)
+[![Security: Audited](https://img.shields.io/badge/Security-Audited-green.svg)](SECURITY.md)
 [![Hackathon](https://img.shields.io/badge/Hackathon-5FSDT%20Postech-blue.svg)](#)
 
 </div>
@@ -637,8 +637,9 @@ hackathon-microservices/
 │
 ├── ARCHITECTURE.md           # Documentação de arquitetura
 ├── DEVELOPMENT.md            # Guia para desenvolvedores
-├── TESTING.md                # Guia de testes
 ├── SECURITY.md               # Políticas de segurança
+├── CONTRIBUTING.md           # Guia de contribuição
+├── seed-materials.sql        # Dados de demonstração
 └── README.md                 # Visão geral do projeto
 ```
 
@@ -653,15 +654,12 @@ hackathon-microservices/
 
 | Documento | Descrição |
 |---|---|
-| [`README.md`](README.md) | Visão geral, quick start e instruções de instalação |
+| [`README.md`](README.md) | Visão geral, quick start e endpoints |
 | [`ARCHITECTURE.md`](ARCHITECTURE.md) | Arquitetura detalhada com diagramas |
-| [`PROJECT_SUMMARY.md`](PROJECT_SUMMARY.md) | Resumo completo do projeto |
 | [`DEVELOPMENT.md`](DEVELOPMENT.md) | Setup do ambiente de desenvolvimento |
-| [`TESTING.md`](TESTING.md) | Guia de testes e endpoints |
 | [`SECURITY.md`](SECURITY.md) | Políticas de segurança e gestão de secrets |
-| [`AUDIT_REPORT.md`](AUDIT_REPORT.md) | Relatório de auditoria de segurança |
-| [`IMPROVEMENT_PLAN.md`](IMPROVEMENT_PLAN.md) | Plano de melhorias e correções |
 | [`CONTRIBUTING.md`](CONTRIBUTING.md) | Guia de contribuição open-source |
+| [`tests/TEST_GUIDE.md`](tests/TEST_GUIDE.md) | Guia de execução dos testes |
 
 ## Deploy e Demonstração
 

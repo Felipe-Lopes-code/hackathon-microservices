@@ -3,353 +3,139 @@
 ## Visão Geral
 
 ```
-                                    ┌─────────────────────┐
-                                    │                     │
-                                    │    INTERNET         │
-                                    │                     │
-                                    └──────────┬──────────┘
-                                               │
-                                               │ HTTPS
-                                               │
-                          ┌────────────────────▼──────────────────────┐
-                          │                                            │
-                          │         Load Balancer (AWS ALB)            │
-                          │                                            │
-                          └────────────┬───────────────────────────────┘
-                                       │
-                   ┌───────────────────┼───────────────────┐
-                   │                   │                   │
-                   ▼                   ▼                   ▼
-          ┌────────────────┐  ┌────────────────┐  ┌────────────────┐
-          │                │  │                │  │                │
-          │  Web Client    │  │  Web Client    │  │  Web Client    │
-          │  (Container)   │  │  (Container)   │  │  (Container)   │
-          │                │  │                │  │                │
-          └───────┬────────┘  └───────┬────────┘  └───────┬────────┘
-                  │                   │                   │
-                  └───────────────────┼───────────────────┘
-                                      │
-                                      ▼
                           ┌──────────────────────┐
-                          │                      │
-                          │    API Gateway       │
-                          │  - Rate Limiting     │
-                          │  - Authentication    │
-                          │  - Routing           │
-                          │                      │
+                          │      Web Client       │
+                          │   React 18 + Vite 7   │
+                          │       (Nginx:80)      │
+                          └──────────┬───────────┘
+                                     │
+                          ┌──────────▼───────────┐
+                          │    API Gateway :3000  │
+                          │  Rate Limiting, CORS  │
+                          │  Swagger, Proxy       │
                           └──────────┬───────────┘
                                      │
                 ┌────────────────────┼────────────────────┐
                 │                    │                    │
                 ▼                    ▼                    ▼
     ┌──────────────────┐ ┌──────────────────┐ ┌──────────────────┐
-    │                  │ │                  │ │                  │
     │  Auth Service    │ │ Material Service │ │  Share Service   │
+    │     :3001        │ │     :3002        │ │     :3003        │
     │                  │ │                  │ │                  │
-    │  - Register      │ │  - CRUD          │ │  - Create        │
-    │  - Login         │ │  - Search        │ │  - List          │
-    │  - JWT Token     │ │  - Categorias    │ │  - Compartilhar  │
-    │                  │ │                  │ │                  │
+    │  Register/Login  │ │  CRUD materiais  │ │  Compartilhar    │
+    │  JWT, Perfis     │ │  Busca (ILIKE)   │ │  Listar, Status  │
+    │                  │ │  Filtro categ.   │ │                  │
     └────────┬─────────┘ └────────┬─────────┘ └────────┬─────────┘
              │                    │                    │
-             │                    │                    │
-             └────────────────────┼────────────────────┘
-                                  │
-                                  ▼
+             ▼                    ▼                    ▼
+         auth_db             product_db            order_db
                       ┌───────────────────────┐
-                      │                       │
-                      │   PostgreSQL          │
-                      │                       │
-                      │  ┌─────────────────┐ │
-                      │  │   auth_db       │ │
-                      │  ├─────────────────┤ │
-                      │  │  material_db    │ │
-                      │  ├─────────────────┤ │
-                      │  │  share_db       │ │
-                      │  └─────────────────┘ │
-                      │                       │
+                      │   PostgreSQL 15 :5432  │
                       └───────────────────────┘
-
-                                  │
-                                  ▼
                       ┌───────────────────────┐
-                      │                       │
-                      │      Redis            │
+                      │   Redis 7 :6379       │
                       │   (Cache/Session)     │
-                      │                       │
                       └───────────────────────┘
 ```
 
-## Fluxo de Dados
-
-### 1. Autenticação
+## Clean Architecture (por serviço)
 
 ```
-┌──────────┐    1. POST /register    ┌─────────────┐
-│          │ ───────────────────────> │             │
-│  Client  │                          │   Gateway   │
-│          │ <─────────────────────── │             │
-└──────────┘    2. JWT Token          └──────┬──────┘
-                                              │
-                                              │ 3. Forward
-                                              │
-                                         ┌────▼─────┐
-                                         │   Auth   │
-                                         │ Service  │
-                                         └────┬─────┘
-                                              │
-                                              │ 4. Save
-                                              │
-                                         ┌────▼─────┐
-                                         │   DB     │
-                                         └──────────┘
+src/
+├── domain/                  # Regras de negócio puras
+│   ├── entities/            # Product, Order, User
+│   └── repositories/        # Interfaces (contratos)
+├── application/             # Casos de uso
+│   └── useCases/            # CreateProduct, GetAllProducts, CreateOrder
+└── infrastructure/          # Implementações concretas
+    ├── database/            # PostgresProductRepository, etc.
+    └── http/
+        ├── controllers/     # ProductController, OrderController
+        ├── routes/          # Express Router
+        └── middlewares/     # authMiddleware
 ```
 
-### 2. Compartilhamento de Material
+A dependência flui de fora para dentro: `infrastructure → application → domain`.
+
+## Fluxos Principais
+
+### Autenticação
 
 ```
-┌──────────┐                          ┌─────────────┐
-│          │  1. POST /shares         │             │
-│  Client  │ ───────────────────────> │   Gateway   │
-│          │  (JWT Token)             │             │
-└──────────┘                          └──────┬──────┘
-                                              │
-                                              │ 2. Verify Token
-                                              │
-                                         ┌────▼─────┐
-                                         │   Auth   │
-                                         │ Service  │
-                                         └──────────┘
-                                              │
-                                              │ 3. Valid
-                                              │
-                                         ┌────▼─────┐
-                                         │  Share   │
-                                         │ Service  │
-                                         └────┬─────┘
-                                              │
-                                              │ 4. Buscar Material
-                                              │
-                                         ┌────▼────────┐
-                                         │  Material   │
-                                         │  Service    │
-                                         └─────────────┘
+Client  ──POST /api/auth/register──▶  Gateway  ──proxy──▶  Auth Service
+                                                                │
+                                                          bcrypt hash
+                                                          salvar em auth_db
+                                                                │
+Client  ◀──── { accessToken, refreshToken } ◀────────────── JWT gerado
 ```
 
-## Padrões de Comunicação
-
-### Síncrona (HTTP/REST)
-
-- Client ↔ API Gateway
-- Gateway ↔ Services
-- Service ↔ Service
-
-### Assíncrona (Futura implementação)
-
-- Message Queue (RabbitMQ/Kafka)
-- Event-driven architecture
-- Pub/Sub pattern
-
-## Segurança
+### Busca de Materiais
 
 ```
-┌────────────────────────────────────────────────────┐
-│                   Security Layers                   │
-├────────────────────────────────────────────────────┤
-│  1. Network Layer                                  │
-│     - HTTPS/TLS                                    │
-│     - Firewall rules                               │
-│     - VPC isolation                                │
-├────────────────────────────────────────────────────┤
-│  2. API Gateway Layer                              │
-│     - Rate Limiting                                │
-│     - CORS                                         │
-│     - Request validation                           │
-├────────────────────────────────────────────────────┤
-│  3. Service Layer                                  │
-│     - JWT Authentication                           │
-│     - Authorization (RBAC)                         │
-│     - Input validation (Joi)                       │
-├────────────────────────────────────────────────────┤
-│  4. Data Layer                                     │
-│     - Password hashing (bcrypt)                    │
-│     - Prepared statements                          │
-│     - Database encryption                          │
-└────────────────────────────────────────────────────┘
+Client  ──GET /api/materials?search=cordel&category=Português──▶  Gateway
+                                                                     │
+                                                               proxy ──▶ Material Service
+                                                                              │
+                                                                  SELECT * FROM products
+                                                                  WHERE name ILIKE '%cordel%'
+                                                                    OR description ILIKE '%cordel%'
+                                                                  AND category = 'Português'
+                                                                              │
+Client  ◀──── { success: true, data: [...], count: N } ◀───────────────────────
 ```
 
-## Escalabilidade
-
-### Horizontal Scaling
+### Compartilhamento
 
 ```
-                    Load Balancer
-                          │
-        ┌─────────────────┼─────────────────┐
-        │                 │                 │
-        ▼                 ▼                 ▼
-   Service 1         Service 2         Service 3
-   Container         Container         Container
+Client  ──POST /api/shares { items: [{productId, quantity}] }──▶  Gateway
+         (JWT no header)                                             │
+                                                               proxy ──▶ Share Service
+                                                                              │
+                                                              1. Valida cada material
+                                                                 via GET product-service
+                                                              2. Cria registro em order_db
+                                                                              │
+Client  ◀──── { success: true, data: { id, items, status: "pending" } } ◀─────
 ```
 
-### Database Scaling
+## Roteamento do Gateway
 
-```
-    Primary DB ─────> Replica DB 1
-        │
-        └────────────> Replica DB 2
-```
+| Rota pública | Rota interna | Serviço |
+|---|---|---|
+| `/api/auth/*` | `/api/auth/*` | auth-service:3001 |
+| `/api/materials/*` | `/api/products/*` | product-service:3002 |
+| `/api/shares/*` | `/api/orders/*` | order-service:3003 |
 
-## Monitoramento
+O proxy é configurado **antes** do `express.json()` body parser para não consumir o body stream de requisições POST.
 
-```
-┌─────────────────────────────────────────────────┐
-│                 Observability                    │
-├─────────────────────────────────────────────────┤
-│  Logs (Winston)                                 │
-│    ↓                                            │
-│  CloudWatch / Application Insights              │
-│    ↓                                            │
-│  Dashboards & Alerts                            │
-├─────────────────────────────────────────────────┤
-│  Metrics (Prometheus)                           │
-│    ↓                                            │
-│  Grafana                                        │
-├─────────────────────────────────────────────────┤
-│  Tracing (Jaeger)                               │
-│    ↓                                            │
-│  Distributed tracing                            │
-└─────────────────────────────────────────────────┘
-```
+## Segurança (camadas)
+
+| Camada | Mecanismo |
+|--------|-----------|
+| Gateway | Helmet.js, CORS, rate limiting (100 req/15 min) |
+| Autenticação | JWT (access + refresh tokens), bcrypt (10 rounds) |
+| Validação | Joi schemas, queries parametrizadas (SQL Injection) |
+| Dados | Bancos isolados por serviço, senhas nunca retornadas |
 
 ## Deployment
 
-### Development
+### Docker Compose (desenvolvimento)
 
-```
-Docker Compose
-    │
-    ├─ postgres
-    ├─ redis
-    ├─ auth-service
-    ├─ material-service (product-service)
-    ├─ share-service (order-service)
-    ├─ api-gateway
-    └─ web-client
-```
+7 containers: `postgres`, `redis`, `auth-service`, `product-service`, `order-service`, `api-gateway`, `web-client`.
 
-### Production (AWS)
+### Cloud (produção)
 
-```
-AWS ECS Cluster
-    │
-    ├─ Task Definition 1 (Auth)
-    ├─ Task Definition 2 (Material)
-    ├─ Task Definition 3 (Share)
-    ├─ Task Definition 4 (Gateway)
-    └─ Task Definition 5 (Web)
-         │
-         └─> ALB (Application Load Balancer)
-              │
-              └─> Route 53 (DNS)
-```
+Terraform configurado para AWS (ECS + RDS + ALB) e Azure (ACI + PostgreSQL). Veja `infrastructure/`.
 
-## Resiliência
+## Tecnologias
 
-### Circuit Breaker Pattern
-
-```javascript
-// Implementação futura
-const circuitBreaker = new CircuitBreaker(serviceCall, {
-  timeout: 3000,
-  errorThresholdPercentage: 50,
-  resetTimeout: 30000,
-});
-```
-
-### Retry Logic
-
-```javascript
-// Implementação atual
-const retryRequest = async (fn, retries = 3) => {
-  for (let i = 0; i < retries; i++) {
-    try {
-      return await fn();
-    } catch (error) {
-      if (i === retries - 1) throw error;
-      await sleep(1000 * (i + 1));
-    }
-  }
-};
-```
-
-## Performance
-
-### Caching Strategy
-
-```
-Client Request
-    │
-    ▼
-Check Redis Cache
-    │
-    ├─ HIT ──> Return cached data
-    │
-    └─ MISS ──> Query Database
-                    │
-                    ▼
-                Save to Redis
-                    │
-                    ▼
-                Return data
-```
-
-### Database Indexing
-
-```sql
--- Índices aplicados
-CREATE INDEX idx_users_email ON users(email);
-CREATE INDEX idx_materials_discipline ON materials(discipline);
-CREATE INDEX idx_materials_level ON materials(level);
-CREATE INDEX idx_shares_user_id ON shares(user_id);
-CREATE INDEX idx_shares_status ON shares(status);
-```
-
-## Tecnologias por Camada
-
-| Camada           | Tecnologia                    |
-|------------------|-------------------------------|
-| Frontend         | React, Vite, Zustand          |
-| API Gateway      | Express, http-proxy-middleware|
-| Services         | Node.js, Express              |
-| Database         | PostgreSQL                    |
-| Cache            | Redis                         |
-| Authentication   | JWT, bcrypt                   |
-| Validation       | Joi                           |
-| Testing          | Jest, Supertest               |
-| Containerization | Docker, Docker Compose        |
-| CI/CD            | GitHub Actions                |
-| Cloud            | AWS, Azure                    |
-| IaC              | Terraform                     |
-| Web Server       | Nginx                         |
-| Logging          | Winston                       |
-
-## Evolução Futura
-
-### Fase 2
-- [ ] Message Queue (RabbitMQ)
-- [ ] Event Sourcing
-- [ ] CQRS Pattern
-- [ ] Service Mesh (Istio)
-
-### Fase 3
-- [ ] GraphQL Gateway
-- [ ] Kubernetes orchestration
-- [ ] Distributed caching
-- [ ] Advanced monitoring
-
-### Fase 4
-- [ ] Machine Learning integration
-- [ ] Real-time analytics
-- [ ] Global CDN
-- [ ] Multi-region deployment
+| Camada | Tecnologia |
+|--------|-----------|
+| Frontend | React 18, Vite 7, Zustand, React Router 6 |
+| Gateway | Express, http-proxy-middleware, swagger-jsdoc |
+| Backend | Node.js 18, Express 4.18, Joi, bcrypt, jsonwebtoken |
+| Banco | PostgreSQL 15 |
+| Cache | Redis 7 |
+| Infra | Docker, Docker Compose, Nginx, Terraform |
+| Testes | Jest, Supertest |

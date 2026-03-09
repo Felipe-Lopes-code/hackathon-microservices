@@ -1,364 +1,152 @@
-# Development Environment Setup
-
-Este guia descreve como configurar o ambiente de desenvolvimento local.
+# Guia de Desenvolvimento
 
 ## Pré-requisitos
 
-- **Node.js 18+**: [Download](https://nodejs.org/)
-- **Docker Desktop**: [Download](https://www.docker.com/products/docker-desktop/)
-- **Git**: [Download](https://git-scm.com/)
-- **VS Code** (recomendado): [Download](https://code.visualstudio.com/)
+- **Docker Desktop** — [download](https://www.docker.com/products/docker-desktop/)
+- **Node.js 18+** (22+ para o web-client) — [download](https://nodejs.org/)
+- **Git** — [download](https://git-scm.com/)
 
-### Extensões VS Code Recomendadas
-
-- ESLint
-- Prettier
-- Docker
-- GitLens
-- Thunder Client (para testar APIs)
-
-## Setup Inicial
-
-### 1. Clone o repositório
+## Setup com Docker (recomendado)
 
 ```bash
 git clone https://github.com/Felipe-Lopes-code/hackathon-microservices.git
 cd hackathon-microservices
+
+# Subir todos os serviços
+docker compose up -d
+
+# Verificar status
+docker compose ps
+
+# Seed de materiais (opcional)
+docker cp seed-materials.sql hackathon-postgres:/tmp/seed.sql
+docker exec hackathon-postgres psql -U postgres -d product_db -f /tmp/seed.sql
+
+# Logs (todos ou de um serviço)
+docker compose logs -f
+docker compose logs -f product-service
 ```
 
-### 2. Inicialização Rápida
+### URLs após subir
 
-**Linux/Mac:**
+| Serviço | URL |
+|---------|-----|
+| Frontend | http://localhost |
+| API Gateway | http://localhost:3000 |
+| Swagger | http://localhost:3000/api-docs |
+
+> Se a porta 5432 estiver ocupada, altere o mapeamento em `docker-compose.yml` (ex: `5433:5432`).
+
+## Desenvolvimento Local (sem Docker)
+
+Inicie PostgreSQL e Redis manualmente ou via Docker:
+
 ```bash
-chmod +x start.sh
-./start.sh
+docker compose up -d postgres redis
 ```
 
-**Windows:**
-```cmd
-start.bat
-```
-
-### 3. Desenvolvimento Individual de Serviços
-
-#### Auth Service
+Depois, em terminais separados:
 
 ```bash
+# Auth Service
 cd services/auth-service
 npm install
-cp .env.example .env
+npm run dev    # porta 3001
 
-# Edite o .env se necessário
-# Inicie o PostgreSQL separadamente ou use Docker
-
-# Modo desenvolvimento
-npm run dev
-
-# Testes
-npm test
-
-# Testes com watch
-npm run test:watch
-```
-
-#### Material Service (product-service)
-
-```bash
+# Material Service
 cd services/product-service
 npm install
-cp .env.example .env
-npm run dev
-```
+npm run dev    # porta 3002
 
-#### Share Service (order-service)
-
-```bash
+# Share Service
 cd services/order-service
 npm install
-cp .env.example .env
-npm run dev
-```
+npm run dev    # porta 3003
 
-#### API Gateway
-
-```bash
+# API Gateway
 cd api-gateway
 npm install
-cp .env.example .env
-npm run dev
-```
+npm run dev    # porta 3000
 
-#### Web Client
-
-```bash
+# Web Client (requer Node 22+)
 cd web-client
-npm install
-cp .env.example .env
-npm run dev
+npm install --legacy-peer-deps
+npm run dev    # porta 5173
 ```
 
-## Desenvolvimento com Docker Compose
+### Variáveis de Ambiente
 
-Para rodar todos os serviços juntos:
+Cada serviço precisa de um `.env`. Use os `.env.example` como base:
 
 ```bash
-# Build e start
-docker-compose -f docker-compose-prod.yml up --build
-
-# Modo detached (background)
-docker-compose -f docker-compose-prod.yml up -d
-
-# Ver logs
-docker-compose -f docker-compose-prod.yml logs -f
-
-# Ver logs de um serviço específico
-docker-compose -f docker-compose-prod.yml logs -f auth-service
-
-# Parar todos os serviços
-docker-compose -f docker-compose-prod.yml down
-
-# Parar e remover volumes
-docker-compose -f docker-compose-prod.yml down -v
+cp services/auth-service/.env.example services/auth-service/.env
+cp services/product-service/.env.example services/product-service/.env
+cp services/order-service/.env.example services/order-service/.env
+cp api-gateway/.env.example api-gateway/.env
 ```
 
-## Banco de Dados
+Variáveis principais:
 
-### Conectar ao PostgreSQL
+| Variável | Valor padrão | Descrição |
+|----------|-------------|-----------|
+| `DB_HOST` | `localhost` | Host do PostgreSQL |
+| `DB_PORT` | `5432` | Porta do PostgreSQL |
+| `DB_USER` | `postgres` | Usuário do banco |
+| `DB_PASSWORD` | — | Senha do banco |
+| `JWT_SECRET` | — | Segredo para assinar tokens (min 32 chars) |
+| `JWT_EXPIRES_IN` | `24h` | Expiração do token |
 
-```bash
-# Via Docker
-docker exec -it hackathon-postgres psql -U postgres
+## Estrutura de Diretórios
 
-# Via cliente local
-psql -h localhost -p 5432 -U postgres -d auth_db
 ```
-
-### Criar dados de teste
-
-```sql
--- No psql
-\c auth_db
-
--- Inserir usuário de teste (gere o hash bcrypt da senha desejada)
--- Exemplo: echo -n 'sua_senha' | npx bcrypt-cli
-INSERT INTO users (email, password, name, role)
-VALUES (
-  'admin@test.com',
-  '<HASH_BCRYPT_DA_SUA_SENHA>',
-  'Admin User',
-  'admin'
-);
-
--- Verificar
-SELECT id, email, name, role FROM users;
-```
-
-## Debugging
-
-### Node.js (VS Code)
-
-Crie `.vscode/launch.json`:
-
-```json
-{
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Debug Auth Service",
-      "skipFiles": ["<node_internals>/**"],
-      "program": "${workspaceFolder}/services/auth-service/src/index.js",
-      "cwd": "${workspaceFolder}/services/auth-service",
-      "envFile": "${workspaceFolder}/services/auth-service/.env"
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Debug Material Service",
-      "skipFiles": ["<node_internals>/**"],
-      "program": "${workspaceFolder}/services/product-service/src/index.js",
-      "cwd": "${workspaceFolder}/services/product-service",
-      "envFile": "${workspaceFolder}/services/product-service/.env"
-    }
-  ]
-}
-```
-
-### Docker Logs
-
-```bash
-# Todos os serviços
-docker-compose -f docker-compose-prod.yml logs -f
-
-# Serviço específico
-docker-compose -f docker-compose-prod.yml logs -f auth-service
-
-# Últimas 100 linhas
-docker-compose -f docker-compose-prod.yml logs --tail=100 auth-service
+services/
+├── auth-service/        # Autenticação (JWT, perfis)
+├── product-service/     # Catálogo de materiais (CRUD, busca)
+└── order-service/       # Compartilhamento de materiais
+api-gateway/             # Proxy, rate limiting, Swagger
+web-client/              # SPA React
+shared/                  # Utilitários compartilhados (cache, pool, token)
+infrastructure/          # Terraform (AWS, Azure)
+tests/                   # Testes de segurança e performance
 ```
 
 ## Testes
 
-### Testes Unitários
-
 ```bash
-# Todos os serviços
-npm test --workspaces
+# Unitários por serviço
+cd services/auth-service && npm test
+cd services/product-service && npm test
+cd services/order-service && npm test
 
-# Serviço específico
-cd services/auth-service
-npm test
-
-# Com coverage
+# Com cobertura
 npm test -- --coverage
 
-# Watch mode
-npm run test:watch
+# Segurança e performance (requer serviços rodando)
+cd tests && npm install && npm run test:security
 ```
 
-### Testes de Integração
+## Banco de Dados
 
 ```bash
-# Certifique-se de que todos os serviços estão rodando
-docker-compose -f docker-compose-prod.yml up -d
+# Conectar via Docker
+docker exec -it hackathon-postgres psql -U postgres
 
-# Execute os testes
-./test-integration.sh
+# Listar bancos
+\l
+
+# Conectar a um banco específico
+\c product_db
+SELECT id, name, category FROM products;
 ```
 
-### Testes de Carga (k6)
-
-```bash
-# Instale k6: https://k6.io/docs/getting-started/installation/
-
-# Execute teste de carga
-k6 run tests/load/api-load-test.js
-```
+Bancos: `auth_db`, `product_db`, `order_db` (criados automaticamente via `init-databases.sql`).
 
 ## Troubleshooting
 
-### Porta já em uso
-
-```bash
-# Linux/Mac
-lsof -i :3000
-kill -9 <PID>
-
-# Windows
-netstat -ano | findstr :3000
-taskkill /PID <PID> /F
-```
-
-### Docker: Limpar tudo
-
-```bash
-# Parar todos os containers
-docker stop $(docker ps -aq)
-
-# Remover todos os containers
-docker rm $(docker ps -aq)
-
-# Remover todas as imagens
-docker rmi $(docker images -q)
-
-# Limpar volumes
-docker volume prune
-
-# Limpar tudo (cuidado!)
-docker system prune -a --volumes
-```
-
-### Problemas com node_modules
-
-```bash
-# Remover e reinstalar
-rm -rf node_modules package-lock.json
-npm install
-
-# Ou use npm ci para instalação limpa
-npm ci
-```
-
-### Problemas com permissões (Linux/Mac)
-
-```bash
-# Dar permissão de execução aos scripts
-chmod +x start.sh
-chmod +x test-integration.sh
-```
-
-## Fluxo de Trabalho Recomendado
-
-1. **Crie uma branch**
-   ```bash
-   git checkout -b feature/minha-feature
-   ```
-
-2. **Desenvolva e teste**
-   ```bash
-   npm run dev
-   npm test
-   ```
-
-3. **Commit com mensagens descritivas**
-   ```bash
-   git add .
-   git commit -m "feat: adiciona validação de email"
-   ```
-
-4. **Push e crie PR**
-   ```bash
-   git push origin feature/minha-feature
-   ```
-
-## Variáveis de Ambiente
-
-### Auth Service
-
-```env
-PORT=3001
-NODE_ENV=development
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=auth_db
-DB_USER=postgres
-DB_PASSWORD=CHANGE_ME_STRONG_PASSWORD
-JWT_SECRET=CHANGE_ME_USE_RANDOM_STRING_MIN_32_CHARS
-JWT_EXPIRES_IN=24h
-```
-
-### Material Service (product-service)
-
-```env
-PORT=3002
-NODE_ENV=development
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=material_db
-DB_USER=postgres
-DB_PASSWORD=CHANGE_ME_STRONG_PASSWORD
-AUTH_SERVICE_URL=http://localhost:3001
-```
-
-### Share Service (order-service)
-
-```env
-PORT=3003
-NODE_ENV=development
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=share_db
-DB_USER=postgres
-DB_PASSWORD=CHANGE_ME_STRONG_PASSWORD
-AUTH_SERVICE_URL=http://localhost:3001
-MATERIAL_SERVICE_URL=http://localhost:3002
-```
-
-## Recursos Adicionais
-
-- [Node.js Docs](https://nodejs.org/docs/)
-- [Express.js Guide](https://expressjs.com/guide/)
-- [PostgreSQL Docs](https://www.postgresql.org/docs/)
-- [Docker Docs](https://docs.docker.com/)
-- [React Docs](https://react.dev/)
+| Problema | Solução |
+|----------|---------|
+| Porta ocupada (5432, 3000) | Altere o mapeamento em `docker-compose.yml` |
+| `npm ci` falha no Docker | Use `npm install` (package-lock.json está na raiz do workspace) |
+| Web-client build falha | Requer Node 22+; use `--legacy-peer-deps` para eslint |
+| POST via gateway retorna 504 | Proxy deve estar antes de `express.json()` em `api-gateway/src/index.js` |
+| Containers não conectam ao banco | Verifique se postgres está `healthy` com `docker compose ps` |
